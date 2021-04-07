@@ -1,6 +1,6 @@
 # cuddly-octo-doodle
 
-nsc ad program capstone project.
+**nsc ad program capstone project.**
 
 An all-in-one app for managing your finances. Link several accounts, get easy-to-read visualization to help make informed choices.
 

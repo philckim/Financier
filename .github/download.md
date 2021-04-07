@@ -10,7 +10,7 @@ To contribute to this project you will need several programs installed and updat
 
    The package handler for the project - updates and manages dependencies.
 
-3. Expo CLI - `npm install --global expo-cli`
+3. **Expo CLI** - `npm install --global expo-cli`
 
 4. [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
