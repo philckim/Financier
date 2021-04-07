@@ -7,6 +7,9 @@ An all-in-one app for managing your finances. Link several accounts, get easy-to
 ## CONTRIBUTING
 
 [Dev Environments](.github/download.md)
+
 [Running Expo](.github/expo.md)
+
 [Github Guidelines](.github/contributing-Github.md)
+
 [JavaScript Guidelines](.github/contiributing-JS.md)
