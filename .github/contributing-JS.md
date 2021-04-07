@@ -1,6 +1,6 @@
 ## JS Contribution Guidelines
 
-Code readability and compatibility is paramound to the application. Thusly, it is important that all contributed code is thoroughly tested before being merged into master. Coding in JS requires the following standards:
+Code readability and compatibility is paramount to the application. Thusly, it is important that all contributed code is thoroughly tested before being merged into master. Coding in JS requires the following standards:
 
 1. [React Hooks](https://reactjs.org/docs/hooks-intro.html)
 
