@@ -13,3 +13,8 @@ An all-in-one app for managing your finances. Link several accounts, get easy-to
 [Github Guidelines](.github/contributing-Github.md)
 
 [JavaScript Guidelines](.github/contiributing-JS.md)
+
+### Backend Documentation
+Information running and testing API routes while in development.
+
+[Running Backend Server](.github/backend.md)
