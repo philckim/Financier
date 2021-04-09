@@ -18,6 +18,7 @@ const client = new plaid.Client({
 // @access  Public
 router.get('/create-link-token', async (req, res) => {
     try {
+      console.log('Attempting to retrieve plaid link-token...');
       const { link_token: linkToken } = await client.createLinkToken({
         user: {
           client_user_id: "unique id",
@@ -29,6 +30,7 @@ router.get('/create-link-token', async (req, res) => {
       });
 
       res.json({ linkToken });
+      console.log('Link-token generated!');
 
     } catch (err) {
         return res.send({ err: err.message })
@@ -40,8 +42,11 @@ router.get('/create-link-token', async (req, res) => {
 // @access  Public
 router.post('/token-exchange', async (req, res) => {
     try {
-      const { publicToken } = req.body;
-      const { access_token: accessToken } = await client.exchangePublicToken(publicToken);
+      console.log('Attempting plaid token-exchange...');
+      const { linkToken } = req.body;
+      console.log('link-token: ', linkToken);
+      const { access_token: accessToken } = await client.exchangePublicToken(linkToken);
+      console.log('Token-exchange successful!');
 
       const balanceResponse = await client.getBalance(accessToken);
       const transactionResponse = await client.getTransactions(
