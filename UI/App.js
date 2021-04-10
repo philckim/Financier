@@ -1,19 +1,29 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function App() {
+import { useAuth } from "./components/hooks/auth-hook";
+import TabNavigator from "./components/navigation/TabNavigator";
+import { AuthContext } from "./components/functions/auth-context";
+
+const App = () => {
+  const { token, login, logout, userId, name, image } = useAuth();
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: !!token,
+        name: name,
+        image: image,
+        token: token,
+        userId: userId,
+        login: login,
+        logout: logout,
+      }}>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;
