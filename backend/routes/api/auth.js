@@ -39,7 +39,6 @@ async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Check if user exists
         let user = await User.findOne({ email });
 
         if(!user) {
