@@ -1,5 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import * as firebase from 'firebase';
+import firebaseConfig from './config/default';
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 export default function App() {
   return (
