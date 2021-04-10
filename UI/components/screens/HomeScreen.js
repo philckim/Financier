@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { AuthContext } from "../hooks/auth-hook";
+import { AuthContext } from "../functions/auth-context";
 
 const HomeScreen = (props) => {
   const auth = useContext(AuthContext);

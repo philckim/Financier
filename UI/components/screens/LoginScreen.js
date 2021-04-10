@@ -1,8 +1,7 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import {
   Text,
   View,
-  Alert,
   Button,
   Keyboard,
   TextInput,
@@ -10,68 +9,11 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import * as firebase from "firebase";
 import { LinearGradient } from "expo-linear-gradient";
-import { AuthContext } from "../functions/auth-context";
+import { useLogin } from "../hooks/login-hook";
 
 const LoginScreen = (props) => {
-  const auth = useContext(AuthContext);
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [enteredPassword, setEnteredPassword] = useState("");
-
-  const emailInputHandler = (value) => {
-    setEnteredEmail(value);
-  };
-
-  const passwordInputHandler = (value) => {
-    setEnteredPassword(value);
-  };
-
-  const resetInputHandler = () => {
-    setEnteredEmail("");
-    setEnteredPassword("");
-  };
-
-  const loginHandler = () => {
-    //     const email = enteredEmail.toString();
-    //     if (email === "" || email.length < 5) {
-    //       Alert.alert(
-    //         "Invalid Email!",
-    //         "You must type in an email address. Minimum 5 characters.",
-    //         [{ text: "Okay", style: "destructive", onPress: resetInputHandler }]
-    //       );
-    //       return;
-    //     }
-
-    //     const password = enteredPassword.toString();
-    //     if (password === "" || password.length < 5) {
-    //       Alert.alert(
-    //         "Invalid Password!",
-    //         "You must type in a password. Minimum 5 characters.",
-    //         [
-    //           {
-    //             text: "Okay",
-    //             style: "destructive",
-    //             onPress: resetInputHandler,
-    //           },
-    //         ]
-    //       );
-    //       return;
-    //     }
-    //     .signInWithEmailAndPassword(enteredEmail, enteredPassword)
-    firebase
-      .auth()
-      .signInWithEmailAndPassword("test@test.com", "123456")
-
-      .then((res) => {
-        auth.login(res.user.refreshToken);
-        props.navigation.navigate("HomeStack");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-    resetInputHandler();
-  };
+  const loginHook = useLogin();
 
   return (
     <TouchableWithoutFeedback
@@ -91,8 +33,8 @@ const LoginScreen = (props) => {
             placeholder={"email address"}
             placeholderTextColor="#8e9eab"
             keyboardType="email-address"
-            onChangeText={emailInputHandler}
-            value={enteredEmail}
+            onChangeText={loginHook.emailInputHandler}
+            value={loginHook.enteredEmail}
           />
           <TextInput
             style={styles.input}
@@ -103,10 +45,10 @@ const LoginScreen = (props) => {
             autoCorrect={false}
             keyboardType="default"
             secureTextEntry={true}
-            onChangeText={passwordInputHandler}
-            value={enteredPassword}
+            onChangeText={loginHook.passwordInputHandler}
+            value={loginHook.enteredPassword}
           />
-          <Button onPress={loginHandler} title="Log In" />
+          <Button onPress={loginHook.loginHandler} title="Log In" />
           <View style={styles.buttonContainer}></View>
         </View>
       </LinearGradient>
