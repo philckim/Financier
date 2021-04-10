@@ -5,7 +5,6 @@ import firebaseConfig from './config/default';
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
 export default function App() {
   return (
