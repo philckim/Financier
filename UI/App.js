@@ -1,4 +1,9 @@
 import React from "react";
+import * as firebase from 'firebase';
+import firebaseConfig from './config/default';
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 import { NavigationContainer } from "@react-navigation/native";
 
 import { useAuth } from "./components/hooks/auth-hook";
