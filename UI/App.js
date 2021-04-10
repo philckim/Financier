@@ -1,28 +1,22 @@
 import React from "react";
-import * as firebase from 'firebase';
-import firebaseConfig from './config/default';
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+import * as firebase from "firebase";
+import firebaseConfig from "./config/default";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { useAuth } from "./components/hooks/auth-hook";
 import TabNavigator from "./components/navigation/TabNavigator";
 import { AuthContext } from "./components/functions/auth-context";
 
+firebase.initializeApp(firebaseConfig);
+
 const App = () => {
-  const { token, login, logout, userId, name, image } = useAuth();
+  const { token } = useAuth();
 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!token,
-        name: name,
-        image: image,
-        token: token,
-        userId: userId,
-        login: login,
-        logout: logout,
+        token,
       }}>
       <NavigationContainer>
         <TabNavigator />
