@@ -11,6 +11,7 @@ web-build/
 UI/config/**
 config/*
 config/default.js
+UI/config/default.js
 
 # macOS
 .DS_Store
