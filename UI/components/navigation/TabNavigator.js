@@ -34,9 +34,11 @@ const TabNavigator = () => {
         activeTintColor: "black",
         inactiveTintColor: "gray",
       }}>
-      <Tab.Screen name="Login" component={LoginStackNavigator} />
-
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      {!auth.isLoggedIn ? (
+        <Tab.Screen name="Login" component={LoginStackNavigator} />
+      ) : (
+        <Tab.Screen name="Home" component={HomeStackNavigator} />
+      )}
     </Tab.Navigator>
   );
 };

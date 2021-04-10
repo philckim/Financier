@@ -10,13 +10,15 @@ import { AuthContext } from "./components/functions/auth-context";
 firebase.initializeApp(firebaseConfig);
 
 const App = () => {
-  const { token } = useAuth();
+  const { token, login, logout } = useAuth();
 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!token,
         token,
+        login,
+        logout,
       }}>
       <NavigationContainer>
         <TabNavigator />

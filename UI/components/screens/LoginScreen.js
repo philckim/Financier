@@ -12,10 +12,10 @@ import {
 
 import * as firebase from "firebase";
 import { LinearGradient } from "expo-linear-gradient";
-import { useAuth } from "../hooks/auth-hook";
+import { AuthContext } from "../functions/auth-context";
 
 const LoginScreen = (props) => {
-  const { login } = useAuth();
+  const auth = useContext(AuthContext);
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
 
@@ -64,7 +64,7 @@ const LoginScreen = (props) => {
       .signInWithEmailAndPassword("test@test.com", "123456")
 
       .then((res) => {
-        login(res.user.refreshToken);
+        auth.login(res.user.refreshToken);
         props.navigation.navigate("HomeStack");
       })
       .catch((error) => {
