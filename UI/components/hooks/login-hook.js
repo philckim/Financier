@@ -4,6 +4,14 @@ import { Alert } from "react-native";
 
 import { AuthContext } from "../functions/auth-context";
 
+/**
+ * @desc A login module that handles form input.
+ *
+ * Throws an alert if input does not match criteria.
+ *
+ * Attempts to log in with the information.
+ * @returns Entered values, event handlers.
+ */
 export const useLogin = () => {
   const auth = useContext(AuthContext);
   const [enteredEmail, setEnteredEmail] = useState("");
