@@ -1,6 +1,10 @@
 import * as SecureStore from "expo-secure-store";
 import { useState, useCallback, useEffect } from "react";
 
+/**
+ * A self contained authentication functionality to save user states into context.
+ * @returns User states, login and logout functionality
+ */
 export const useAuth = () => {
   const [token, setToken] = useState();
 

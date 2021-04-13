@@ -1,22 +1,17 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import Colors from "../constants/colors";
 import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/LoginScreen";
+import LandingScreen from "../screens/LandingScreen";
 
 const HomeStack = createStackNavigator();
-const LoginStack = createStackNavigator();
+const LandingStack = createStackNavigator();
 
-const defaultStyling = (route) => {
-  return {
-    headerTintColor: "blue",
-    headerTitleStyle: {
-      fontSize: 28,
-    },
-    title: route.name.split("Stack"),
-  };
-};
-
+/**
+ * The "stacks" contain the pages and their individual histories.
+ * @returns The screen and its child history modules.
+ */
 export const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator>
@@ -29,14 +24,35 @@ export const HomeStackNavigator = () => {
   );
 };
 
-export const LoginStackNavigator = () => {
+/**
+ * The "stacks" contain the pages and their individual histories.
+ * @returns The screen and its child history modules.
+ */
+export const LandingStackNavigator = () => {
   return (
-    <LoginStack.Navigator>
-      <LoginStack.Screen
-        name="Login"
-        component={LoginScreen}
+    <LandingStack.Navigator>
+      <LandingStack.Screen
+        name="Landing"
+        component={LandingScreen}
         options={({ route }) => defaultStyling(route)}
       />
-    </LoginStack.Navigator>
+    </LandingStack.Navigator>
   );
+};
+
+/**
+ * Returns customizable styling based on route.
+ * @param {screen} route - The selected route.
+ * @returns Styling.
+ */
+const defaultStyling = (route) => {
+  return {
+    headerStyle: {
+      backgroundColor: Colors.slate,
+    },
+    headerTintColor: Colors.bone,
+    headerTitleStyle: {
+      fontSize: 28,
+    },
+  };
 };

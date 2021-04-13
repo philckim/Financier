@@ -25,7 +25,7 @@ Code readability and compatibility is paramount to the application. Thusly, it i
 
 6. **Useful Commenting Only**
 
-   Code, as a general rule, should be fair and readable without requiring excessive commentation. This functions two ways: Code which could become confusing should be commented above its line. Code which should be obvious should not be commented for the sake of commenting, eg "Returns this" above the return block.
+   Code should be readable without requiring excessive commentation. This functions two ways: Code which could become confusing should be commented above its line. Code which should be obvious should not be commented for the sake of commenting, eg "Returns this" above the return block. JSdoc format is preferred: This is built into vscode, type `/**`.
 
 ## An Example.
 
