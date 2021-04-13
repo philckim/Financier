@@ -1,44 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
-  Text,
-  View,
   Button,
-  Keyboard,
-  TextInput,
+  KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
-  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import * as firebase from "firebase";
 import { LinearGradient } from "expo-linear-gradient";
+import * as firebase from "firebase";
 
+import { AuthContext } from "../functions/auth-context";
+import Card from "../shared/Card";
 import Colors from "../constants/colors";
-import {
-  VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE,
-} from "../functions/validators";
+import Input from "../shared/Input";
 import { useForm } from "../hooks/form-hook";
 
-const SignupScreen = (props) => {
+const LandingScreen = (props) => {
+  const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-
-  return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}>
-      <LinearGradient
-        colors={["#6DD5FA", "#FFFFFF"]}
-        style={styles.linearGradient}>
-        <View style={styles.inputContainer}>{getContent}</View>
-        <Text onPress={switchModeHandler}>Switch Modes</Text>
-        <Button onPress={authSubmitHandler} title="Log In" />
-      </LinearGradient>
-    </TouchableWithoutFeedback>
-  );
-};
-
-const switchModeHandler = () => {
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -53,39 +32,52 @@ const switchModeHandler = () => {
     false
   );
 
-  if (!isLoginMode) {
-    setFormData(
-      {
-        ...formState.inputs,
-        name: undefined,
-        image: undefined,
-      },
-      formState.inputs.email.isValid && formState.inputs.password.isValid
-    );
-  } else {
-    setFormData(
-      {
-        ...formState.inputs,
-        name: {
-          value: "",
-          isValid: false,
+  /**
+   * Switches the form data when user presses the button.
+   */
+  const switchModeHandler = () => {
+    if (!isLoginMode) {
+      setFormData(
+        {
+          ...formState.inputs,
+          email: undefined,
+          password: undefined,
         },
-        image: {
-          value: null,
-          isValid: false,
+        formState.inputs.email.isValid && formState.inputs.password.isValid
+      );
+    } else {
+      setFormData(
+        {
+          ...formState.inputs,
+          email: {
+            value: "",
+            isValid: false,
+          },
+          password: {
+            value: null,
+            isValid: false,
+          },
+          verify: {
+            value: null,
+            isValid: false,
+          },
         },
-      },
-      false
-    );
-  }
-  setIsLoginMode((prevMode) => !prevMode);
-};
+        false
+      );
+    }
+    setIsLoginMode((prevMode) => !prevMode);
+  };
 
-const authSubmitHandler = async (event) => {
-  event.preventDefault();
-
-  if (isLoginMode) {
-    try {
+  /**
+   * Signs into firebase according to which mode the user has flipped to:
+   *
+   * Login or Sign Up mode.
+   */
+  const authHandler = () => {
+    if (!formState.inputs) {
+      return;
+    }
+    if (isLoginMode) {
       firebase
         .auth()
         .signInWithEmailAndPassword(
@@ -94,100 +86,119 @@ const authSubmitHandler = async (event) => {
         )
         .then((res) => {
           auth.login(res.user.refreshToken);
+          console.log(`Logged in`);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
         });
-    } catch (err) {}
-  } else {
-    try {
+    } else {
       firebase
         .auth()
-        .createUserWithEmailAndPassword(enteredEmail, enteredPassword)
+        .createUserWithEmailAndPassword(
+          formState.inputs.email.value,
+          formState.inputs.password.value
+        )
         .then((res) => {
           res.user.updateProfile({
-            email: enteredEmail,
+            email,
           });
-          console.log("User registered successfully!");
-          resetInputHandler();
-          props.navigation.navigate("LoginStack");
+          console.log("User registered");
+          auth.login(res.user.refreshToken);
         })
-        .catch((error) => setError({ errorMessage: error.message }));
-    } catch (err) {}
-  }
-};
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
-const getContent = () => {
   return (
-    <>
-      <TextInput
-        style={styles.input}
-        blurOnSubmit
-        autoCapitalize="none"
-        autoCorrect={false}
-        placeholder={"email address"}
-        placeholderTextColor="#8e9eab"
-        keyboardType="email-address"
-        onChangeText={inputHandler}
-        value={formState.inputs.email.value}
-      />
-      <TextInput
-        style={styles.input}
-        blurOnSubmit
-        placeholder={"password"}
-        placeholderTextColor="#8e9eab"
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-        secureTextEntry={true}
-        onChangeText={inputHandler}
-        value={formState.inputs.password.value}
-      />
-      {!isLoginMode && (
-        <TextInput
-          style={styles.input}
-          blurOnSubmit
-          placeholder={"retype password"}
-          placeholderTextColor="#8e9eab"
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="default"
-          secureTextEntry={true}
-          onChangeText={inputHandler}
-          value={formState.inputs.password.value}
-        />
-      )}
-    </>
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={50}
+      style={styles.screen}>
+      <LinearGradient
+        colors={[Colors.ocean, "#FFFFFF"]}
+        style={styles.gradient}>
+        <Card style={styles.authContainer}>
+          <ScrollView>
+            <Input
+              id="email"
+              label="E-Mail"
+              keyboardType="email-address"
+              required
+              email
+              autoCapitalize="none"
+              errorMessage="Please enter a valid email address"
+              onInputChange={inputHandler}
+              initialValue=""
+            />
+            <Input
+              id="password"
+              label="Password"
+              keyboardType="default"
+              required
+              secureTextEntry
+              required
+              minLength={5}
+              autoCapitalize="none"
+              errorMessage="Please enter a valid password"
+              onInputChange={inputHandler}
+              initialValue=""
+            />
+            {!isLoginMode && (
+              <Input
+                id="verify"
+                label="Retype Password"
+                keyboardType="default"
+                required
+                secureTextEntry
+                required
+                minLength={5}
+                autoCapitalize="none"
+                errorMessage="Passwords don't match!"
+                onInputChange={inputHandler}
+                initialValue=""
+              />
+            )}
+            <View style={styles.buttonContainer}>
+              <Button
+                title={isLoginMode ? "Login" : "Sign Up"}
+                color={Colors.slate}
+                onPress={authHandler}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                title={`Switch to ${isLoginMode ? "Sign Up" : "Login"}`}
+                color={Colors.moss}
+                onPress={switchModeHandler}
+              />
+            </View>
+          </ScrollView>
+        </Card>
+      </LinearGradient>
+    </KeyboardAvoidingView>
   );
 };
 
-export default SignupScreen;
+export default LandingScreen;
 
 const styles = StyleSheet.create({
-  linearGradient: {
-    opacity: 0.95,
-    height: "100%",
-    width: "100%",
+  screen: {
+    flex: 1,
   },
-  title: {
-    marginVertical: 20,
-  },
-  inputContainer: {
-    alignItems: "center",
+  gradient: {
+    flex: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
-  input: {
-    width: "90%",
-    textAlign: "center",
-    borderRadius: 5,
-    padding: 12,
-    backgroundColor: "white",
-    marginBottom: 18,
+  authContainer: {
+    width: "80%",
+    maxWidth: 400,
+    maxHeight: 400,
+    padding: 20,
   },
-  loginButton: {
-    marginTop: 25,
-    color: "#006AFF",
-    fontSize: 18,
-    textAlign: "center",
+  buttonContainer: {
+    marginTop: 10,
   },
 });

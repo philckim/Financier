@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Colors from "../constants/colors";
 import HomeScreen from "../screens/HomeScreen";
 import LandingScreen from "../screens/LandingScreen";
-import LoginScreen from "../screens/LoginScreen";
 
 const HomeStack = createStackNavigator();
 const LandingStack = createStackNavigator();
@@ -35,11 +34,6 @@ export const LandingStackNavigator = () => {
       <LandingStack.Screen
         name="Landing"
         component={LandingScreen}
-        options={({ route }) => defaultStyling(route)}
-      />
-      <LandingStack.Screen
-        name="Login"
-        component={LoginScreen}
         options={({ route }) => defaultStyling(route)}
       />
     </LandingStack.Navigator>
