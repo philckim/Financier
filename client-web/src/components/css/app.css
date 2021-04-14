@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -245,10 +245,10 @@ img {
   color: #888;
 }
 
-.form input[type='text'],
-.form input[type='email'],
-.form input[type='password'],
-.form input[type='date'],
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="date"],
 .form select,
 .form textarea {
   display: block;
@@ -258,7 +258,7 @@ img {
   border: 1px solid #ccc;
 }
 
-.form input[type='submit'],
+.form input[type="submit"],
 button {
   font: inherit;
 }
@@ -301,7 +301,7 @@ button {
 /* Landing Page */
 .landing {
   position: relative;
-  background: url('./assets/cuddle-octo.png') no-repeat center center;
+  background: url("../../assets/cuddle-octo.png") no-repeat center center;
   height: 100vh;
 }
 
@@ -315,6 +315,10 @@ button {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.header {
+  color: "black";
 }
 
 /* Mobile Styles */
