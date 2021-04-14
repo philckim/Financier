@@ -1,44 +1,51 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+
 import { PlaidLink } from "react-plaid-link";
-import moment from "moment";
+import { useAxiosClient } from "../hooks/axios-hook";
+
 import { AuthContext } from "../functions/auth-context";
 
 const Dashboard = (props) => {
   const auth = useContext(AuthContext);
+  const { isLoading, error, sendRequest, clearError } = useAxiosClient();
   const [linkToken, setLinkToken] = useState("");
   const [plaidData, setPlaidData] = useState();
 
   useEffect(() => {
+    if (!auth.userId) return;
     const createLinkToken = async () => {
-      console.log("Getting temp link_token... ");
-      const res = await axios.get(
-        "http://localhost:5000/api/plaid/create-link-token"
+      const responseData = await sendRequest(
+        "GET",
+        "http://localhost:5000/api/plaid/create-link-token",
+        {
+          userId: auth.userId,
+        },
+        {
+          "x-auth-token": auth.token,
+        }
       );
-      // console.log(res.data)
-      const {
-        data: { linkToken: tokenData },
-      } = res;
-      setLinkToken(tokenData);
-      // console.log('link_token: ', linkToken);
+
+      setLinkToken(responseData.linkToken);
     };
     createLinkToken();
-  }, []);
+  }, [auth.userId, auth.token, sendRequest]);
 
-  const onSuccess = useCallback(async (publicToken, metadata) => {
-    console.log("Attempting token exchange...");
-    console.log("linkToken: ", linkToken);
-    const { data } = await axios.post(
-      "http://localhost:5000/api/plaid/token-exchange",
-      {
-        publicToken: publicToken,
-        metadata,
-      }
-    );
-    setPlaidData(data);
-  }, []);
+  const onSuccess = useCallback(
+    async (publicToken, metadata) => {
+      console.log("Attempting token exchange...");
+      console.log("linkToken: ", linkToken);
+      const { data } = await sendRequest(
+        "POST",
+        "http://localhost:5000/api/plaid/token-exchange",
+        {
+          publicToken: publicToken,
+          metadata,
+        }
+      );
+      setPlaidData(data);
+    },
+    [linkToken, sendRequest]
+  );
 
   return (
     <div>

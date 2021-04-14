@@ -1,5 +1,4 @@
 import React, { useState, useContext } from "react";
-import jwt from "jwt-decode";
 
 import { AuthContext } from "../functions/auth-context";
 import { useAxiosClient } from "../hooks/axios-hook";
@@ -94,7 +93,7 @@ const Login = () => {
           formData
         );
 
-        auth.login(responseData.token, responseData.userId, responseData.name);
+        auth.login(responseData.token);
       } catch (err) {}
     }
   };

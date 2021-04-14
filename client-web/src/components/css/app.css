@@ -5,6 +5,11 @@
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --slate: #152a38;
+  --ocean: #29435c;
+  --moss: #556e53;
+  --bone: #d1d4c9;
+  --heart: #845460;
 }
 
 * {
