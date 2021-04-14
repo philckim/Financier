@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "install": "^0.13.0",
+    "jwt-decode": "^3.1.2",
     "npm": "^7.9.0",
     "plaid-threads": "^11.2.3",
     "prop-types": "^15.7.2",
