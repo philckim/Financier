@@ -54,11 +54,11 @@ router.post("/token-exchange", auth, async (req, res) => {
       console.log('Attempting backend plaid token exchange...')
       const { publicToken } = req.body;
       const { access_token: accessToken, item_id: itemId } = await client.exchangePublicToken(publicToken);
+      // console.log(`accessToken: ${accessToken}, itemId: ${itemId}`);
 
       // onSuccess -> save access_token for future use
       if(accessToken) {
         // Check if account exists
-        // console.log(`accessToken: ${accessToken}, itemId: ${itemId}`);
         let account = await Account.findOne({
           userId: user.id,
           institutionId: institution_id
