@@ -15,20 +15,21 @@ import { AuthContext } from "./components/functions/auth-context";
 import "./components/css/app.css";
 
 const App = () => {
-  const { token, login, logout, userId, name } = useAuth();
-  let routes = getRoutes(!!token);
+  const { token, login, logout } = useAuth();
+  let routes = getRoutes(!!token.token);
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: !!token,
-        token: token,
+        isLoggedIn: !!token.token,
         login: login,
         logout: logout,
-        userId: userId,
-        name: name,
+        email: token.email,
+        name: token.name,
+        userId: token.userId,
+        token: token.token,
       }}>
-      {!!token && <Dashboard />}
+      {!!token.token && <Dashboard />}
       <Router>{routes}</Router>
     </AuthContext.Provider>
   );
