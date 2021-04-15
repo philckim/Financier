@@ -17,7 +17,7 @@ const client = new plaid.Client({
 
 // @route   GET api/plaid
 // @desc    Create a temp Link token to exchange with plaid api
-// @access  Public
+// @access  Private
 router.get("/create-link-token", auth, async (req, res) => {
   console.log("received");
   const user = await User.findById(req.user.userId);
@@ -44,7 +44,7 @@ router.get("/create-link-token", auth, async (req, res) => {
 // @route   POST api/plaid
 // @desc    Plaid token exchange: 
 // @params  {body: publicToken, metadata, auth.token, headers: 'x-auth-token'}
-// @access  Public
+// @access  Private
 router.post("/token-exchange", auth, async (req, res) => {
 
   // Send token through auth middleware -> decode token and asign userId to user
