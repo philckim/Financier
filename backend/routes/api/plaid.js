@@ -42,11 +42,15 @@ router.get("/create-link-token", auth, async (req, res) => {
 });
 
 // @route   POST api/plaid
-// @desc    Plaid token exchange
+// @desc    Plaid token exchange: 
+// @params  {body: publicToken, metadata, auth.token, headers: 'x-auth-token'}
 // @access  Public
 router.post("/token-exchange", auth, async (req, res) => {
-  const user = await User.findById(req.user.id);
-  console.log(req.body.metadata);
+
+  // Send token through auth middleware -> decode token and asign userId to user
+  const user = await User.findById(req.user.userId);
+  
+  // Pull linked bank acount info from meta data 
   const institution = req.body.metadata.institution;
   const { name, institution_id } = institution;
 
@@ -82,18 +86,6 @@ router.post("/token-exchange", auth, async (req, res) => {
         }
       }
       
-      //fetch account data from plaid api
-      // const balanceResponse = await client.getBalance(accessToken);
-      // const transactionResponse = await client.getTransactions(
-      //   accessToken,
-      //   moment().subtract("3", "months").format("YYYY-MM-DD"),
-      //   moment().format("YYYY-MM-DD"),
-      //   { count: 300, offset: 0}
-      // );
-
-      // console.log('Account Balance: ', balanceResponse);
-      // console.log('Transaction Data: ', transactionResponse);
-      // res.json({ balanceResponse, transactionResponse });
       console.log('token exchange success!')
    } catch (err) {
       return res.send({ err: err.message })

@@ -41,6 +41,10 @@ const Dashboard = (props) => {
         {
           publicToken: publicToken,
           metadata,
+          token: auth.token
+        },
+        {
+          'x-auth-token': auth.token
         }
       );
       setPlaidData(data);
