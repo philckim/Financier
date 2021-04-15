@@ -8,16 +8,20 @@ const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 const Account = require("../../models/Account");
 
-// configure plaid api w/ api keys
+/**
+ *  configure plaid api w/ api keys
+ */
 const client = new plaid.Client({
   clientID: keys.PLAID_CLIENT_ID,
   secret: keys.PLAID_SECRET,
   env: plaid.environments.sandbox,
 });
 
-// @route   GET api/plaid
-// @desc    Create a temp Link token to exchange with plaid api
-// @access  Public
+/**
+ *  @route   GET api/plaid
+ *  @desc    Create a temp Link token to exchange with plaid api
+ *  @access  Private
+ */
 router.get("/create-link-token", auth, async (req, res) => {
   console.log("received");
   const user = await User.findById(req.user.userId);
@@ -41,51 +45,83 @@ router.get("/create-link-token", auth, async (req, res) => {
   }
 });
 
-// @route   POST api/plaid
-// @desc    Plaid token exchange
-// @access  Public
+/**
+ *  @route   POST api/plaid
+ *  @desc    Plaid token exchange:
+ *  @params  {body: publicToken, metadata, auth.token, headers: 'x-auth-token'}
+ *  @access  Private
+ */
 router.post("/token-exchange", auth, async (req, res) => {
-  const user = await User.findById(req.user.id);
 
-  // console.log(req.body);
-  const { publicToken } = req.body.publicToken;
+  /**
+   *  Send token through auth middleware -> decode token and asign userId to user
+   */
+  const user = await User.findById(req.user.userId);
+  
+  /**
+   *  Pull linked bank acount info from meta data 
+   */
+  const institution = req.body.metadata.institution;
+  const { name, institution_id } = institution;
 
+    try {
+      console.log('Attempting backend plaid token exchange...')
+      const { publicToken } = req.body;
+      const { access_token: accessToken, item_id: itemId } = await client.exchangePublicToken(publicToken);
+      // console.log(`accessToken: ${accessToken}, itemId: ${itemId}`);
+
+      /**
+       *  onSuccess -> save access_token for future use
+       */
+      if(accessToken) {
+        // Check if account exists
+        let account = await Account.findOne({
+          userId: user.id,
+          institutionId: institution_id
+        })
+        if(account) {
+          console.log(`Account already linked!`);
+        } else {
+          /**
+           *  Create account and save to DB
+           */
+          console.log('Account not found, Creating account...')
+          account = new Account({
+            userId: user.id,
+            accessToken: accessToken,
+            itemId: itemId,
+            institutionId: institution_id,
+            institutionName: name
+          });
+
+          account.save();
+          // console.log(`Account created:  ${account}`);
+          res.json(account)
+        }
+      }
+      
+      console.log('token exchange success!')
+   } catch (err) {
+      return res.send({ err: err.message })
+   }
+});
+
+/**
+ *  @route GET api/plaid/accounts
+ *  @desc Get all accounts linked with plaid for a specific user
+ *  @access Private
+ */
+router.get('/accounts', auth, async (req, res) => {
   try {
-    console.log("backend token exchange...");
-    const { publicToken } = req.body;
-    const { access_token: accessToken } = await client.exchangePublicToken(
-      publicToken
-    );
+    const accounts = await Account.find({ userId: req.user.id });
 
-    //fetch account data from plaid api
-    const balanceResponse = await client.getBalance(accessToken);
-    const transactionResponse = await client.getTransactions(
-      accessToken,
-      moment().subtract("3", "months").format("YYYY-MM-DD"),
-      moment().format("YYYY-MM-DD"),
-      { count: 300, offset: 0 }
-    );
-
-    // console.log('Account Balance: ', balanceResponse);
-    // console.log('Transaction Data: ', transactionResponse);
-    res.json({ balanceResponse, transactionResponse });
-    console.log("token exchange success!");
+    if(!accounts) {
+      console.log(`No accounts found for user: ${req.user.name}`);
+    }
+    accounts.map(account => res.json(account));
   } catch (err) {
-    return res.send({ err: err.message });
+    return res.send({ err: err.message })
   }
 });
-
-// @route GET api/plaid/accounts
-// @desc Get all accounts linked with plaid for a specific user
-// @access Private
-router.get("/accounts", auth, (req, res) => {
-  Account.find({ userId: req.user.id })
-    .then((accounts) => res.json(accounts))
-    .catch((err) => console.log(err));
-});
-
-// @route POST api/plaid/accounts
-// @desc Get all accounts linked with plaid for a specific user
-// @access Private
 
 module.exports = router;
