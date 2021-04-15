@@ -94,7 +94,10 @@ const Login = () => {
         );
 
         auth.login(responseData.token);
-      } catch (err) {}
+        console.log(responseData);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
