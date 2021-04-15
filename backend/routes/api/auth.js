@@ -68,7 +68,7 @@ router.post(
       jwt.sign(
         payload,
         config.get("jwtSecret"),
-        { expiresIn: 3600 },
+        { expiresIn: "1h" },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
@@ -76,7 +76,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Servr Error (auth.js)");
+      res.status(500).send("Server Error (auth.js)");
     }
   }
 );
