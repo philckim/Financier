@@ -1,51 +1,50 @@
-const express = require('express');
-const keys = require('../../config/default.json');
-const plaid = require('plaid');
+const express = require("express");
+const keys = require("../../config/default.json");
+const plaid = require("plaid");
 const router = express.Router();
-const moment = require('moment');
-const auth = require('../../middleware/auth');
+const moment = require("moment");
+const auth = require("../../middleware/auth");
 
-const User = require('../../models/User');
-const Account = require('../../models/Account');
+const User = require("../../models/User");
+const Account = require("../../models/Account");
 
 // configure plaid api w/ api keys
 const client = new plaid.Client({
-    clientID: keys.PLAID_CLIENT_ID,
-    secret: keys.PLAID_SECRET,
-    env: plaid.environments.sandbox
+  clientID: keys.PLAID_CLIENT_ID,
+  secret: keys.PLAID_SECRET,
+  env: plaid.environments.sandbox,
 });
 
 // @route   GET api/plaid
 // @desc    Create a temp Link token to exchange with plaid api
 // @access  Public
-router.get('/create-link-token', auth, async (req, res) => {
-    const user = await User.findById(req.user.id);
+router.get("/create-link-token", auth, async (req, res) => {
+  console.log("received");
+  const user = await User.findById(req.user.userId);
+  try {
+    // console.log(user);
+    // console.log(`backend create-link-token req by: ${user.id}`);
+    const { link_token: linkToken } = await client.createLinkToken({
+      user: {
+        client_user_id: user.id,
+      },
+      client_name: "SandboxUser",
+      products: ["auth", "identity", "transactions"],
+      country_codes: ["US"],
+      language: "en",
+    });
 
-    try {
-      // console.log(user);
-      // console.log(`backend create-link-token req by: ${user.id}`);
-      const { link_token: linkToken } = await client.createLinkToken({
-        user: {
-          client_user_id: user.id,
-        },
-        client_name: "SandboxUser",
-        products: ["auth", "identity", "transactions"],
-        country_codes: ["US"],
-        language: "en",
-      });
-
-      res.json({ linkToken });
-      // console.log('create-link-token success! token: ', {linkToken})
-
-    } catch (err) {
-        return res.send({ err: err.message })
-    }
+    res.json({ linkToken });
+    console.log("create-link-token success! token: ", { linkToken });
+  } catch (err) {
+    return res.send({ err: err.message });
+  }
 });
 
 // @route   POST api/plaid
 // @desc    Plaid token exchange
 // @access  Public
-router.post('/token-exchange', auth, async (req, res) => {
+router.post("/token-exchange", auth, async (req, res) => {
   const user = await User.findById(req.user.id);
   console.log(req.body.metadata);
   const institution = req.body.metadata.institution;
