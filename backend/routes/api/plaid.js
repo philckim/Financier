@@ -8,7 +8,6 @@ const ObjectId = require('mongodb').ObjectID;
 
 const User = require("../../models/User");
 const Account = require("../../models/Account");
-const { request } = require("express");
 
 /**
  *  configure plaid api w/ api keys
