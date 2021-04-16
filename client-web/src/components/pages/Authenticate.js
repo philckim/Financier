@@ -35,6 +35,10 @@ const Login = () => {
     false
   );
 
+  /**
+   * User presses SWITCH TO LOGIN/SIGNUP: Changes form data
+   * @param {state} isLoginMode - Login default. Current mode
+   */
   const switchModeHandler = () => {
     if (!isLoginMode) {
       setFormData(
@@ -64,6 +68,11 @@ const Login = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
+  /**
+   * User presses LOGIN or SIGN UP: Sends the respective request & data
+   * @param {*} event - Click
+   * @param {state} formState - What is currently typed in
+   */
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
@@ -90,7 +99,11 @@ const Login = () => {
         const responseData = await sendRequest(
           "POST",
           "http://localhost:5000/api/users",
-          formData
+          {
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }
         );
 
         auth.login(responseData.token);

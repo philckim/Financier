@@ -11,7 +11,6 @@ const Dashboard = (props) => {
   const [linkToken, setLinkToken] = useState("");
   const [plaidData, setPlaidData] = useState();
 
-  console.log(auth);
   useEffect(() => {
     if (!auth.userId) return;
     const createLinkToken = async () => {
@@ -41,15 +40,15 @@ const Dashboard = (props) => {
         {
           publicToken: publicToken,
           metadata,
-          token: auth.token
+          token: auth.token,
         },
         {
-          'x-auth-token': auth.token
+          "x-auth-token": auth.token,
         }
       );
       setPlaidData(data);
     },
-    [linkToken, sendRequest]
+    [auth.token, linkToken, sendRequest]
   );
 
   return (
