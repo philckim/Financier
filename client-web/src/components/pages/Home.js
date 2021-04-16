@@ -4,15 +4,7 @@ import { AuthContext } from "../functions/auth-context";
 const Home = (props) => {
   const auth = useContext(AuthContext);
 
-  const logoutHandler = () => {
-    auth.logout();
-  };
-  return (
-    <div>
-      Home
-      <button onClick={logoutHandler}>LOGOUT</button>
-    </div>
-  );
+  return <div>Home</div>;
 };
 
 export default Home;
