@@ -19,11 +19,14 @@ router.post('/', [
     check('password', 'Password must be atleast 6 characters').isLength({ min: 6 })
 ], 
 async (req, res) => {
+    console.log('registering user...');
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
+        console.log('errors found', errors);
         return res.status(400).json({ errors: errors.array() });
     }
 
+    console.log(req.body);
     const { name, email, password } = req.body;
 
     try {
@@ -58,7 +61,9 @@ async (req, res) => {
         // return jsonwebtoken
         const payload = {
             user: {
-                id: user.id
+                userId: user.id,
+                email: user.email,
+                name: user.name,
             }
         }
 
