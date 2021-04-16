@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-
 import { PlaidLink } from "react-plaid-link";
-import { useAxiosClient } from "../hooks/axios-hook";
 
 import { AuthContext } from "../functions/auth-context";
+import { useAxiosClient } from "../hooks/axios-hook";
+import ErrorModal from "../layout/ErrorModal";
+import LoadingSpinner from "../layout/LoadingSpinner";
 
 const Dashboard = (props) => {
   const auth = useContext(AuthContext);
@@ -52,17 +53,21 @@ const Dashboard = (props) => {
   );
 
   return (
-    <div>
-      <h2>Welcome {auth.isLoggedIn && auth.name}</h2>
-      <h3>No Accounts found!</h3>
-      <h4>
-        Link your account now with plaid, Click the 'Link via Plaid' button to
-        get started.
-      </h4>
-      <PlaidLink token={linkToken} onSuccess={onSuccess}>
-        Link via Plaid
-      </PlaidLink>
-    </div>
+    <React.Fragment>
+      <ErrorModal error={error} onClear={clearError} />
+      {isLoading && <LoadingSpinner asOverlay />}
+      <div>
+        <h2>Welcome {auth.isLoggedIn && auth.name}</h2>
+        <h3>No Accounts found!</h3>
+        <h4>
+          Link your account now with plaid, Click the 'Link via Plaid' button to
+          get started.
+        </h4>
+        <PlaidLink token={linkToken} onSuccess={onSuccess}>
+          Link via Plaid
+        </PlaidLink>
+      </div>
+    </React.Fragment>
   );
 };
 
