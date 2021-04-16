@@ -7,6 +7,7 @@ const auth = require("../../middleware/auth");
 
 const User = require("../../models/User");
 const Account = require("../../models/Account");
+const { request } = require("express");
 
 /**
  *  configure plaid api w/ api keys
@@ -79,6 +80,12 @@ router.post("/token-exchange", auth, async (req, res) => {
           userId: user.id,
           institutionId: institution_id
         })
+        User.findByIdAndUpdate(
+          { user: req.user.userId },
+          { accessToken: accessToken },
+          { new: true }
+        );
+
         if(account) {
           console.log(`Account already linked!`);
         } else {

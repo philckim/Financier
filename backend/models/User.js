@@ -21,8 +21,9 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    access_token: {
-        type: Array
+    accessToken: {
+        type: String,
+        default: ''
     },
     transaction: {
         type: Array
