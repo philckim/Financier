@@ -1,14 +1,14 @@
 .button {
+  display: inline-block;
   font: inherit;
   padding: 0.5rem 1.5rem;
-  border: 1px solid var(--slate);
+  border: 1px solid var(--ocean);
   border-radius: 4px;
-  background: var(--slate);
+  background: var(--ocean);
   color: white;
   cursor: pointer;
   margin-right: 1rem;
   text-decoration: none;
-  display: inline-block;
 }
 
 .button:focus {
@@ -17,8 +17,9 @@
 
 .button:hover,
 .button:active {
-  background: var(--ocean);
-  border-color: var(--ocean);
+  background: var(--bone);
+  border-color: var(--bone);
+  color: var(--slate);
 }
 
 .button--inverse {
@@ -28,17 +29,19 @@
 
 .button--inverse:hover,
 .button--inverse:active {
-  color: white;
+  color: var(--bone);
   background: var(--ocean);
 }
 
 .button--danger {
+  color: white;
   background: var(--heart);
   border-color: var(--heart);
 }
 
 .button--danger:hover,
 .button--danger:active {
+  color: var(--heart);
   background: var(--bone);
   border-color: var(--bone);
 }
