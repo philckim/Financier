@@ -1,18 +1,12 @@
 import React, { useContext } from "react";
+
 import { AuthContext } from "../functions/auth-context";
+import Dashboard from "../layout/Dashboard";
 
 const Home = (props) => {
   const auth = useContext(AuthContext);
 
-  const logoutHandler = () => {
-    auth.logout();
-  };
-  return (
-    <div>
-      Home
-      <button onClick={logoutHandler}>LOGOUT</button>
-    </div>
-  );
+  return <div>{auth.isLoggedIn ? <Dashboard /> : "ERROR"}</div>;
 };
 
 export default Home;

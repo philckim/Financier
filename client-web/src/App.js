@@ -8,6 +8,7 @@ import {
 
 import Authenticate from "./components/pages/Authenticate";
 import Dashboard from "./components/layout/Dashboard";
+import Header from "./components/layout/Header";
 import Home from "./components/pages/Home";
 import { useAuth } from "./components/hooks/auth-hook";
 import { AuthContext } from "./components/functions/auth-context";
@@ -29,7 +30,6 @@ const App = () => {
         userId: token.userId,
         token: token.token,
       }}>
-      {!!token.token && <Dashboard />}
       <Router>{routes}</Router>
     </AuthContext.Provider>
   );
@@ -40,12 +40,15 @@ export default App;
 const getRoutes = (isLoggedIn) => {
   if (isLoggedIn) {
     return (
-      <Switch>
-        <Route path="/" exact>
-          <Home />
-        </Route>
-        <Redirect to="/" exact />
-      </Switch>
+      <React.Fragment>
+        <Header />
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Redirect to="/" exact />
+        </Switch>
+      </React.Fragment>
     );
   } else {
     return (

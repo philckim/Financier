@@ -87,9 +87,7 @@ const Login = () => {
           }
         );
         auth.login(responseData.token);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     } else {
       try {
         const formData = new FormData();
@@ -105,12 +103,8 @@ const Login = () => {
             password: formState.inputs.password.value,
           }
         );
-
         auth.login(responseData.token);
-        console.log(responseData);
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
   };
 
