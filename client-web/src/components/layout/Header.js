@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 
 import { AuthContext } from "../functions/auth-context";
 import Button from "../shared/Button";
@@ -13,7 +13,9 @@ const Header = (props) => {
   };
   return (
     <div className="header-container">
-      <div className="header-info">Test</div>
+      <div className="header-info">
+        Welcome{auth.isLoggedIn && ` ${auth.name}`}
+      </div>
       <Button onClick={logoutHandler}>LOGOUT</Button>
     </div>
   );

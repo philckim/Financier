@@ -57,7 +57,6 @@ const Dashboard = (props) => {
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       <div>
-        <h2>Welcome {auth.isLoggedIn && auth.name}</h2>
         <h3>No Accounts found!</h3>
         <h4>
           Link your account now with plaid, Click the 'Link via Plaid' button to
