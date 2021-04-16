@@ -4,6 +4,7 @@ const plaid = require("plaid");
 const router = express.Router();
 const moment = require("moment");
 const auth = require("../../middleware/auth");
+const ObjectId = require('mongodb').ObjectID;
 
 const User = require("../../models/User");
 const Account = require("../../models/Account");
@@ -80,11 +81,6 @@ router.post("/token-exchange", auth, async (req, res) => {
           userId: user.id,
           institutionId: institution_id
         })
-        User.findByIdAndUpdate(
-          { user: req.user.userId },
-          { accessToken: accessToken },
-          { new: true }
-        );
 
         if(account) {
           console.log(`Account already linked!`);
@@ -114,8 +110,8 @@ router.post("/token-exchange", auth, async (req, res) => {
 });
 
 /**
- *  @route GET api/plaid/accounts
- *  @desc Get all accounts linked with plaid for a specific user
+ *  @route  GET api/plaid/accounts
+ *  @desc   Get all accounts linked with plaid for a specific user
  *  @access Private
  */
 router.get('/accounts', auth, async (req, res) => {
@@ -130,5 +126,57 @@ router.get('/accounts', auth, async (req, res) => {
     return res.send({ err: err.message })
   }
 });
+
+/**
+ *  @route  DELETE api/plaid/accounts/:id
+ *  @desc   Delete target account linked with plaid for a specific user
+ *  @access Private
+ */
+router.delete('/accounts/:id', auth, async (req, res) => {
+  Account.findById(req.params.id).then(account => {
+    account.remove().then(() => res.json({ success: true }));
+  });
+});
+
+/**
+ *  @route  POST api/plaid/accounts/data
+ *  @desc   Get balance and transaction data for accounts
+ *  @access Private
+ */
+router.post('/accounts/data', auth, async (req, res) => {
+  // Setup date ranges
+  const now = moment();
+  const today = now.format("YYYY-MM-DD");
+  const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
+
+  try {
+    // pulls userId out of the req, use userId to cast to new objectId, ref ObjectId to find account in mongoDB.
+    const userId = req.user.userId;
+    const objId = new ObjectId(userId);
+    const [accounts] = await Account.find({userId: objId});
+
+    if(!accounts.accessToken){
+      throw new Error('Invalid AccessToken!');
+    } else {
+      // Fetch account data from plaid
+      const balanceResponse = await client.getBalance(accounts.accessToken);
+      const transactionResponse = await client.getTransactions(
+        accounts.accessToken,
+        thirtyDaysAgo,
+        today, 
+        { count: 50, offset: 0 }
+      );
+
+      // return data
+      console.log(`BalanceResponse: ${balanceResponse}`);
+      console.log(`transactionResponse: ${transactionResponse}`);
+      res.json({ balanceResponse, transactionResponse });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.send({ err: err.message });
+  }
+  
+})
 
 module.exports = router;
