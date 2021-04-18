@@ -148,7 +148,9 @@ const Login = () => {
                 errorText="Please enter a valid password, at least 5 characters."
                 onInput={inputHandler}
               />
-              <Button type="submit">{isLoginMode ? "LOGIN" : "SIGNUP"}</Button>
+              <Button disabled={!formState.isValid} type="submit">
+                {isLoginMode ? "LOGIN" : "SIGNUP"}
+              </Button>
             </form>
             <Button inverse onClick={switchModeHandler}>
               SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
