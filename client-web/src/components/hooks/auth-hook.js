@@ -23,41 +23,38 @@ export const useAuth = () => {
    * @param encryptedToken - Received from the server. Encrypted user object.
    * @param expirationDate - If this was locally stored (ie: close the browser, reopen) it will use this to stay logged in.
    */
-  const login = useCallback(
-    (encryptedToken, expirationDate) => {
-      let decryptedToken = jwt(encryptedToken);
+  const login = useCallback((encryptedToken, expirationDate) => {
+    let decryptedToken = jwt(encryptedToken);
 
-      /**
-       * Gives assigns the user a new expiration date (unless they have one)
-       */
-      const tokenExpirationDate =
-        expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+    /**
+     * Gives assigns the user a new expiration date (unless they have one)
+     */
+    const tokenExpirationDate =
+      expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
 
-      /**
-       * Updates user states. First is all values found in user object.
-       */
-      setUserData((prevState) => {
-        return {
-          ...userData,
-          ...decryptedToken.user,
-          token: encryptedToken,
-          tokenExpiry: tokenExpirationDate,
-        };
-      });
+    /**
+     * Updates user states. First is all values found in user object.
+     */
+    setUserData((prevState) => {
+      return {
+        ...prevState,
+        ...decryptedToken.user,
+        token: encryptedToken,
+        tokenExpiry: tokenExpirationDate,
+      };
+    });
 
-      /**
-       * Stores the user data locally so they can relogin.
-       */
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          token: userData.token,
-          tokenExpiry: tokenExpirationDate.toISOString(),
-        })
-      );
-    },
-    [userData]
-  );
+    /**
+     * Stores the user data locally so they can relogin.
+     */
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        token: encryptedToken,
+        tokenExpiry: tokenExpirationDate.toISOString(),
+      })
+    );
+  }, []);
 
   /**
    * Nulls out all of the user values and deletes their local storage.

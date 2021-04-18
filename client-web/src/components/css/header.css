@@ -2,9 +2,8 @@
   display: flex;
   background: var(--slate);
   padding: 6px 8px;
-  margin-bottom: 0.5rem;
-  width: 100%;
-  height: 13%;
+  height: 3.5rem;
+  margin-bottom: 1rem;
   justify-content: space-between;
 }
 .header-info {

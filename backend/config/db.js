@@ -1,7 +1,6 @@
-
-const mongoose = require('mongoose');
-const config = require('config');
-const db = config.get('mongoURI');
+const mongoose = require("mongoose");
+const config = require("config");
+const db = config.get("mongoURI");
 
 const connectDB = async () => {
   try {
@@ -12,10 +11,10 @@ const connectDB = async () => {
       useFindAndModify: false,
     });
 
-    console.log('MongoDB Connected...');
+    console.log("MongoDB Connected...");
   } catch (err) {
     console.error(err.message);
-    // Exit on fail
+    /** Exit on fail */
     process.exit(1);
   }
 };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
-// Create Schema
+/** Plaid Account Schema */
 const AccountSchema = new mongoose.Schema({
   userId: {
     type: Schema.Types.ObjectId,
