@@ -21,7 +21,7 @@ export const useAxiosClient = () => {
           responseData = res.data;
         })
         .catch((err) => {
-          setError(err.message);
+          setError(err.response.data.message);
           setIsLoading(false);
           throw err;
         });

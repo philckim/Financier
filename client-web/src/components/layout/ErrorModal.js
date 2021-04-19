@@ -1,7 +1,7 @@
 import React from "react";
 
-import Modal from "./Modal";
 import Button from "../shared/Button";
+import Modal from "./Modal";
 
 const ErrorModal = (props) => {
   return (
@@ -10,7 +10,7 @@ const ErrorModal = (props) => {
       header="An Error Occurred!"
       show={!!props.error}
       footer={<Button onClick={props.onClear}>Okay</Button>}>
-      <p>{props.error}</p>
+      <h4 style={{ color: "black" }}>{props.error}</h4>
     </Modal>
   );
 };

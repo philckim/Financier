@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 
 import Authenticate from "./components/pages/Authenticate";
-import Dashboard from "./components/layout/Dashboard";
 import Header from "./components/layout/Header";
 import Home from "./components/pages/Home";
 import { useAuth } from "./components/hooks/auth-hook";
