@@ -14,10 +14,8 @@ const Dashboard = (props) => {
   const [plaidData, setPlaidData] = useState();
   const [accounts, setAccounts] = useState();
 
-  /**
-   * Literally just to clear out the unused warning
-   */
-  if (plaidData);
+  /** Literally just to clear out the unused warning  */
+  if ((plaidData, accounts));
 
   useEffect(() => {
     if (!auth.token) return;
@@ -32,34 +30,35 @@ const Dashboard = (props) => {
           "x-auth-token": auth.token,
         }
       );
-
-      setLinkToken(responseData.linkToken);
+      setLinkToken(responseData);
     };
+
     createLinkToken();
   }, [auth.userId, auth.token, sendRequest]);
 
   /**  on component load check for accounts associated with logged in user   */
   useEffect(() => {
-    if (!auth.token) return;
+    if (!linkToken) return;
     const getAccounts = async () => {
       const responseData = await sendRequest(
         "GET",
         "http://localhost:5000/api/plaid/accounts",
         {
-          userId: auth.userId
+          userId: auth.userId,
         },
         {
-          "x-auth-token": auth.token
+          "x-auth-token": auth.token,
         }
       );
       setAccounts(responseData);
     };
-    getAccounts()
-  }, [auth.userId, auth.token, sendRequest]);
+
+    getAccounts();
+  }, [auth.userId, auth.token, sendRequest, linkToken]);
 
   const onSuccess = useCallback(
     async (publicToken, metadata) => {
-      const { data } = await sendRequest(
+      const responseData = await sendRequest(
         "POST",
         "http://localhost:5000/api/plaid/token-exchange",
         {
@@ -71,14 +70,13 @@ const Dashboard = (props) => {
           "x-auth-token": auth.token,
         }
       );
-      setPlaidData(data);
+      setPlaidData(responseData);
     },
     [auth.token, sendRequest]
   );
 
   return (
     <div className="dashboard-screen">
-      {console.log(accounts)}
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       <h3>No Accounts found!</h3>

@@ -26,7 +26,6 @@ router.post(
     }),
   ],
   async (req, res, next) => {
-    console.log("registering user...");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log("errors found", errors);
@@ -40,7 +39,7 @@ router.post(
     try {
       user = await User.findOne({ email });
     } catch (err) {
-      const error = new HttpError("Error fetching user", 500);
+      const error = new HttpError("Error fetching user.", 500);
       throw next(error);
     }
 
@@ -64,11 +63,14 @@ router.post(
     });
 
     /** Encrypted password */
-    const salt = await bcrypt.genSalt(10);
-
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
+    try {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+      await user.save();
+    } catch (err) {
+      const error = new HttpError("Sign Up Failed.", 500);
+      return next(error);
+    }
 
     /** JSON user object */
     const payload = {
@@ -84,10 +86,10 @@ router.post(
     try {
       token = jwt.sign(payload, config.get("jwtSecret"), { expiresIn: 3600 });
     } catch (err) {
-      const error = new HttpError("Login Failed!", 500);
+      const error = new HttpError("Login Failed.", 500);
       return next(error);
     }
-    res.send({ token });
+    res.json(token);
   }
 );
 

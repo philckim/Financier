@@ -41,7 +41,7 @@ router.post(
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(new HttpError("Invalid inputs passed", 422));
+      return next(new HttpError("Invalid inputs.", 422));
     }
 
     const { email, password } = req.body;
@@ -51,7 +51,7 @@ router.post(
     try {
       user = await User.findOne({ email });
     } catch (err) {
-      const error = new HttpError("Login Failed!", 500);
+      const error = new HttpError("Login Failed.", 500);
       return next(error);
     }
 
@@ -68,7 +68,7 @@ router.post(
     try {
       isMatch = await bcrypt.compare(password, user.password);
     } catch (err) {
-      const error = new HttpError("Login Failed!", 500);
+      const error = new HttpError("Login Failed.", 500);
       return next(error);
     }
 
@@ -93,7 +93,7 @@ router.post(
         expiresIn: "1h",
       });
     } catch (err) {
-      const error = new HttpError("Login Failed!", 500);
+      const error = new HttpError("Login Failed.", 500);
       return next(error);
     }
 
