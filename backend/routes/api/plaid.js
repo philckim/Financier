@@ -8,6 +8,7 @@ const ObjectId = require('mongodb').ObjectID;
 
 const User = require("../../models/User");
 const Account = require("../../models/Account");
+const HttpError = require("../../models/Http-Error");
 
 /**
  *  configure plaid api w/ api keys
@@ -23,7 +24,7 @@ const client = new plaid.Client({
  *  @desc    Create a temp Link token to exchange with plaid api
  *  @access  Private
  */
-router.get("/create-link-token", auth, async (req, res) => {
+router.get("/create-link-token", auth, async (req, res, next) => {
   console.log("received");
   const user = await User.findById(req.user.userId);
   try {
@@ -42,7 +43,8 @@ router.get("/create-link-token", auth, async (req, res) => {
     res.json({ linkToken });
     console.log("create-link-token success! token: ", { linkToken });
   } catch (err) {
-    return res.send({ err: err.message });
+    const error = new HttpError('Server Error.', 500);
+    return next(error);
   }
 });
 
@@ -52,7 +54,7 @@ router.get("/create-link-token", auth, async (req, res) => {
  *  @params  {body: publicToken, metadata, auth.token, headers: 'x-auth-token'}
  *  @access  Private
  */
-router.post("/token-exchange", auth, async (req, res) => {
+router.post("/token-exchange", auth, async (req, res, next) => {
 
   /**
    *  Send token through auth middleware -> decode token and asign userId to user
@@ -83,6 +85,8 @@ router.post("/token-exchange", auth, async (req, res) => {
 
         if(account) {
           console.log(`Account already linked!`);
+          const error = new HttpError('Account already linked!', 405);
+          return next(error);
         } else {
           /**
            *  Create account and save to DB
@@ -104,7 +108,8 @@ router.post("/token-exchange", auth, async (req, res) => {
       
       console.log('token exchange success!')
    } catch (err) {
-      return res.send({ err: err.message })
+      const error = new HttpError('Server Error', 500);
+      return next(error);
    }
 });
 
@@ -113,17 +118,28 @@ router.post("/token-exchange", auth, async (req, res) => {
  *  @desc   Get all accounts linked with plaid for a specific user
  *  @access Private
  */
-router.get('/accounts', auth, async (req, res) => {
-  try {
-    const accounts = await Account.find({ userId: req.user.id });
+router.get('/accounts', auth, async (req, res, next) => {
+  const userId = req.user.userId;
+  const objId = new ObjectId(userId);
 
-    if(!accounts) {
-      console.log(`No accounts found for user: ${req.user.name}`);
-    }
-    accounts.map(account => res.json(account));
-  } catch (err) {
-    return res.send({ err: err.message })
+  let accounts;
+  try {
+    accounts = await Account.find({ userId: objId });
+
+  } catch (err) { 
+    console.log('err: ',err);
+    return next(new HttpError('Server Error', 500));
   }
+  if(!accounts) {
+    console.log(`No accounts found for user: ${req.user.name}`);
+    return next(new HttpError('No accounts found.', 404));
+  }
+  res.json({
+    accounts: accounts.map((account) =>
+      account.toObject({ getters: true })
+    ),
+  });
+  
 });
 
 /**
@@ -138,11 +154,12 @@ router.delete('/accounts/:id', auth, async (req, res) => {
 });
 
 /**
+ *  @todo   convert this to take in itemId and only pull data for that item
  *  @route  POST api/plaid/accounts/data
  *  @desc   Get balance and transaction data for accounts
  *  @access Private
  */
-router.post('/accounts/data', auth, async (req, res) => {
+router.post('/accounts/data', auth, async (req, res, next) => {
   // Setup date ranges
   const now = moment();
   const today = now.format("YYYY-MM-DD");
@@ -155,7 +172,8 @@ router.post('/accounts/data', auth, async (req, res) => {
     const [accounts] = await Account.find({userId: objId});
 
     if(!accounts.accessToken){
-      throw new Error('Invalid AccessToken!');
+      const error = new HttpError('Invalid AccessToken!', 401);
+      return next(error);
     } else {
       // Fetch account data from plaid
       const balanceResponse = await client.getBalance(accounts.accessToken);
@@ -173,9 +191,44 @@ router.post('/accounts/data', auth, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    return res.send({ err: err.message });
-  }
+    const error = new HttpError('Server Error', 500);
+    return next(error);
+  } 
+});
+
+/**
+ *  @todo   convert this to take in itemId and only pull data for that item
+ *  @route  POST api/plaid/income/get
+ *  @desc   Get total income
+ *  @access Private
+ */
+router.post('/income', auth, async (req, res, next) => {
+  console.log(`Attempting to fetch user income...`);
+  const userId = req.user.userId;
+  const objId = new ObjectId(userId);
+
+  try {
+    const [accounts] = await Account.find({ userId: objId });
+    console.log(`Account retrieval success -> accessToken: ${accounts.accessToken}`);
+
+    if(!accounts) {
+      console.log(`No accounts found for user: ${req.user.name}`);
+      return next(new HttpError('No accounts found.', 404));
+    }else {
+      const { incomeResponse } = client.getIncome(accounts.accessToken);
+      console.log(`api call success -> data: ${incomeResponse}`);
+      let income = 0;
+
+      if(incomeResponse) {
+        income = incomeResponse.income; 
+      }
+      res.json(income);
+    }
   
+  } catch (err) { 
+    return next(new HttpError('Server Error', 500));
+  }
 })
+
 
 module.exports = router;
