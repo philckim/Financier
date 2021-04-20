@@ -159,7 +159,7 @@ router.delete('/accounts/:id', auth, async (req, res) => {
  *  @access Private
  */
 router.post('/accounts/data', auth, async (req, res, next) => {
-  // Setup date ranges
+  /** Setup date ranges */
   const now = moment();
   const today = now.format("YYYY-MM-DD");
   const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
