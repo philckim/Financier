@@ -38,9 +38,7 @@ const Dashboard = (props) => {
     createLinkToken();
   }, [auth.userId, auth.token, sendRequest]);
 
-  /**
-   *  on component load check for accounts associated with logged in user
-   */
+  /**  on component load check for accounts associated with logged in user   */
   useEffect(() => {
     if (!auth.token) return;
     const getAccounts = async () => {
