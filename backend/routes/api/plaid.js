@@ -174,7 +174,7 @@ router.post('/accounts/data', auth, async (req, res, next) => {
       const error = new HttpError('Invalid AccessToken!', 401);
       return next(error);
     } else {
-      // Fetch account data from plaid
+      /** Fetch account data from plaid */
       const balanceResponse = await client.getBalance(accounts.accessToken);
       const transactionResponse = await client.getTransactions(
         accounts.accessToken,
