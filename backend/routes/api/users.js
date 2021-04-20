@@ -40,7 +40,7 @@ router.post(
       user = await User.findOne({ email });
     } catch (err) {
       const error = new HttpError("Error fetching user.", 500);
-      throw next(error);
+      return next(error);
     }
 
     if (user) {

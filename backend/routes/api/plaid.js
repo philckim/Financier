@@ -28,12 +28,12 @@ router.get("/create-link-token", auth, async (req, res, next) => {
     user = await User.findById(req.user.userId);
   } catch (err) {
     const error = new HttpError("Could not fetch account.", 500);
-    throw next(error);
+    return next(error);
   }
 
   if (!user) {
     const error = new HttpError("Could not find user.", 404);
-    throw next(error);
+    return next(error);
   }
 
   let linkToken;
@@ -49,7 +49,7 @@ router.get("/create-link-token", auth, async (req, res, next) => {
     });
   } catch (err) {
     const error = new HttpError("Could not create link token.", 500);
-    throw next(error);
+    return next(error);
   }
 
   res.json(linkToken.link_token);
@@ -80,7 +80,7 @@ router.post("/token-exchange", auth, async (req, res, next) => {
     itemId = item_id;
   } catch (err) {
     const error = new HttpError("Could not retrieve access token.", 500);
-    throw next(error);
+    return next(error);
   }
 
   /** Check if account already exists */
@@ -92,7 +92,7 @@ router.post("/token-exchange", auth, async (req, res, next) => {
     });
   } catch (err) {
     const error = new HttpError("Could not fetch account.", 500);
-    throw next(error);
+    return next(error);
   }
 
   if (account) {
@@ -112,7 +112,7 @@ router.post("/token-exchange", auth, async (req, res, next) => {
     account.save();
   } catch (err) {
     const error = new HttpError("Could not create account.", 500);
-    throw next(error);
+    return next(error);
   }
 
   res.json(account);
@@ -155,12 +155,12 @@ router.delete("/accounts/:id", auth, async (req, res) => {
     account = Account.findById(req.params.id);
   } catch (err) {
     const error = new HttpError("Error fetching account.", 500);
-    throw next(error);
+    return next(error);
   }
 
   if (!account) {
     const error = new HttpError("Could not find account.", 404);
-    throw next(error);
+    return next(error);
   }
 
   account.remove().then(() => res.json({ success: true }));
@@ -228,7 +228,7 @@ router.post("/income", auth, async (req, res, next) => {
     accounts = await Account.find({ userId: objId });
   } catch (err) {
     const error = new HttpError("Error fetching accounts.", 500);
-    throw next(error);
+    return next(error);
   }
 
   if (!accounts) {
@@ -241,7 +241,7 @@ router.post("/income", auth, async (req, res, next) => {
     incomeResponse = client.getIncome(accounts.accessToken);
   } catch (err) {
     const error = new HttpError("Could not fetch income.", 500);
-    throw next(error);
+    return next(error);
   }
 
   res.json(incomeResponse.income || 0);
