@@ -45,7 +45,7 @@ router.post(
     }
 
     if (user) {
-      const error = new HttError("User already exists.", 422);
+      const error = new HttpError("User already exists.", 422);
       return next(error);
     }
 
