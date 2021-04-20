@@ -129,6 +129,7 @@ router.get('/accounts', auth, async (req, res, next) => {
     console.log('err: ',err);
     return next(new HttpError('Server Error', 500));
   }
+  
   if(!accounts) {
     console.log(`No accounts found for user: ${req.user.name}`);
     return next(new HttpError('No accounts found.', 404));
