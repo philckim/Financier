@@ -84,7 +84,6 @@ router.post("/token-exchange", auth, async (req, res, next) => {
         })
 
         if(account) {
-          console.log(`Account already linked!`);
           const error = new HttpError('Account already linked!', 405);
           return next(error);
         } else {
