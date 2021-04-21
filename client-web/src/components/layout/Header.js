@@ -14,7 +14,9 @@ const Header = (props) => {
   return (
     <div className="header-container">
       <div className="header-info">
-        Welcome{auth.isLoggedIn && ` ${auth.name}`}
+        Welcome
+        {auth.isLoggedIn &&
+          ` ${auth.name.replace(/^\w/, (c) => c.toUpperCase())}`}
       </div>
       <Button onClick={logoutHandler}>LOGOUT</Button>
     </div>
