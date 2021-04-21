@@ -6,3 +6,14 @@
   align-content: center;
   height: 7rem;
 }
+
+.dashboard-accounts {
+  display: flex;
+  margin-top: 5rem;
+}
+
+.dashboard-card {
+  width: 11rem;
+  height: 11rem;
+  margin-right: 1rem;
+}
