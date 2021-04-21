@@ -178,17 +178,13 @@ router.post("/accounts/:id", auth, async (req, res, next) => {
   const today = now.format("YYYY-MM-DD");
   const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
 
-  /** pulls userId out of the req, use userId to cast to new objectId, ref ObjectId to find account in mongoDB. */
-  const userId = req.user.userId;
-  const objId = new ObjectId(userId);
+  /** Pull target accountId out of url parmas */
   const accountId = req.params.id;
-  console.log(accountId)
 
   let accountData; 
   try {
     console.log('Attempting to fetch account data...')
     accountData = await Account.findOne({ _id: accountId });
-    console.log(accountData);
   } catch (err) {
     const error = new HttpError("Could not fetch account data.", 500);
     return next(error);
