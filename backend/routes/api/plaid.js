@@ -172,7 +172,7 @@ router.delete("/accounts/:id", auth, async (req, res) => {
  *  @desc   Get balance and transaction data for accounts
  *  @access Private
  */
-router.post("/accounts/data", auth, async (req, res, next) => {
+router.post("/accounts/:id", auth, async (req, res, next) => {
   /** Setup date ranges */
   const now = moment();
   const today = now.format("YYYY-MM-DD");
@@ -181,29 +181,35 @@ router.post("/accounts/data", auth, async (req, res, next) => {
   /** pulls userId out of the req, use userId to cast to new objectId, ref ObjectId to find account in mongoDB. */
   const userId = req.user.userId;
   const objId = new ObjectId(userId);
+  const accountId = req.params.id;
+  console.log(accountId)
 
-  let accounts;
+  let accountData; 
   try {
-    accounts = await Account.find({ userId: objId });
+    console.log('Attempting to fetch account data...')
+    accountData = await Account.findOne({ _id: accountId });
+    console.log(accountData);
   } catch (err) {
-    const error = new HttpError("Could not fetch accounts.", 500);
+    const error = new HttpError("Could not fetch account data.", 500);
     return next(error);
   }
 
-  if (!accounts.accessToken) {
+  if (!accountData.accessToken) {
     const error = new HttpError("Invalid access token.", 401);
     return next(error);
   }
 
   /** Fetch account data from plaid */
-  let balanceResponse, transactionResponse;
+  let balanceResponse, transactionResponse; 
   try {
-    balanceResponse = await client.getBalance(accounts.accessToken);
+    balanceResponse = await client.getBalance(
+      accountData.accessToken
+    );
     transactionResponse = await client.getTransactions(
-      accounts.accessToken,
+      accountData.accessToken,
       thirtyDaysAgo,
       today,
-      { count: 50, offset: 0 }
+      { count: 10, offset: 0 }
     );
   } catch (err) {
     const error = new HttpError("Could not fetch transactions.");
