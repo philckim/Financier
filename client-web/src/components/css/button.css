@@ -22,15 +22,28 @@
   color: var(--slate);
 }
 
+.button--dark {
+  background: var(--slate);
+  color: var(--bone);
+}
+
+.button--dark:hover,
+.button--dark:active {
+  color: var(--bone);
+  background: var(--ocean);
+  border-color: var(--ocean);
+}
+
 .button--inverse {
-  background: transparent;
-  color: var(--moss);
+  background: var(--bone);
+  color: var(--slate);
 }
 
 .button--inverse:hover,
 .button--inverse:active {
   color: var(--bone);
-  background: var(--ocean);
+  background: var(--slate);
+  border-color: var(--slate);
 }
 
 .button--danger {

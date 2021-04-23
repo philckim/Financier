@@ -1,22 +1,18 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import { PlaidLink } from "react-plaid-link";
 
+import AccountsList from "../shared/AccountsList";
 import { AuthContext } from "../functions/auth-context";
 import { useAxiosClient } from "../hooks/axios-hook";
-import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
-import "../css/dashboard.css";
+import "../css/home.css";
 
-const Dashboard = (props) => {
+const HomeScreen = (props) => {
+  const [accounts, setAccounts] = useState([]);
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useAxiosClient();
   const [linkToken, setLinkToken] = useState();
-  const [plaidData, setPlaidData] = useState();
-  const [accounts, setAccounts] = useState([]);
-
-  /** Literally just to clear out the unused warning  */
-  if ((plaidData, accounts));
 
   useEffect(() => {
     if (!auth.token) return;
@@ -97,19 +93,20 @@ const Dashboard = (props) => {
     );
   } else {
     content = (
-      <div className="dashboard-accounts">
-        <AccountsList accounts={accounts} />
-        <Card className="dashboard-card">
-          <PlaidLink token={linkToken} onSuccess={onSuccess}>
-            Link via Plaid
-          </PlaidLink>
-        </Card>
+      <div className="home-accounts">
+        <AccountsList accounts={accounts} userId={auth.userId} />
+        <PlaidLink
+          className="home-card"
+          token={linkToken}
+          onSuccess={onSuccess}>
+          Link via Plaid
+        </PlaidLink>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-screen">
+    <div className="home-screen">
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {content}
@@ -117,14 +114,4 @@ const Dashboard = (props) => {
   );
 };
 
-export default Dashboard;
-
-const AccountsList = (props) => {
-  return props.accounts.map((account) => {
-    return (
-      <Card className="dashboard-card" key={account.id}>
-        <h3 style={{ color: "black" }}>{account.institutionName}</h3>
-      </Card>
-    );
-  });
-};
+export default HomeScreen;

@@ -56,6 +56,82 @@ router.get("/create-link-token", auth, async (req, res, next) => {
 });
 
 /**
+ *  @route  GET api/plaid/accounts
+ *  @desc   Get all accounts linked with plaid for a specific user
+ *  @access Private
+ */
+router.get("/accounts", auth, async (req, res, next) => {
+  const userId = req.user.userId;
+  const objId = new ObjectId(userId);
+
+  let accounts;
+  try {
+    accounts = await Account.find({ userId: objId });
+  } catch (err) {
+    return next(new HttpError("Could not fetch accounts.", 500));
+  }
+
+  if (!accounts) {
+    const error = new HttpError("No accounts found.", 404);
+    return next(error);
+  }
+
+  res.json({
+    accounts: accounts.map((account) => account.toObject({ getters: true })),
+  });
+});
+
+/**
+ *  @route  POST api/plaid/accounts/data
+ *  @desc   Get balance and transaction data for accounts
+ *  @access Private
+ */
+router.get("/accounts/:accountId", auth, async (req, res, next) => {
+  /** Setup date ranges */
+  const now = moment();
+  const today = now.format("YYYY-MM-DD");
+  const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
+
+  /** Pull target accountId out of url parmas */
+  const accountId = req.params.accountId;
+
+  if (!accountId) {
+    const error = new HttpError("Could not fetch account", 404);
+    return next(error);
+  }
+
+  let accountData;
+  try {
+    accountData = await Account.findOne({ _id: accountId });
+  } catch (err) {
+    const error = new HttpError("Could not fetch account data.", 500);
+    return next(error);
+  }
+
+  if (!accountData.accessToken) {
+    const error = new HttpError("Invalid access token.", 401);
+    return next(error);
+  }
+
+  /** Fetch account data from plaid */
+  let balanceResponse, transactionResponse;
+  try {
+    balanceResponse = await client.getBalance(accountData.accessToken);
+    transactionResponse = await client.getTransactions(
+      accountData.accessToken,
+      thirtyDaysAgo,
+      today,
+      { count: 10, offset: 0 }
+    );
+  } catch (err) {
+    const error = new HttpError("Could not fetch transactions.");
+    return next(error);
+  }
+
+  res.json({ balanceResponse, transactionResponse });
+});
+
+/**
  *  @route   POST api/plaid
  *  @desc    Plaid token exchange:
  *  @params  {body: publicToken, metadata, auth.token, headers: 'x-auth-token'}
@@ -119,32 +195,6 @@ router.post("/token-exchange", auth, async (req, res, next) => {
 });
 
 /**
- *  @route  GET api/plaid/accounts
- *  @desc   Get all accounts linked with plaid for a specific user
- *  @access Private
- */
-router.get("/accounts", auth, async (req, res, next) => {
-  const userId = req.user.userId;
-  const objId = new ObjectId(userId);
-
-  let accounts;
-  try {
-    accounts = await Account.find({ userId: objId });
-  } catch (err) {
-    return next(new HttpError("Could not fetch accounts.", 500));
-  }
-
-  if (!accounts) {
-    const error = new HttpError("No accounts found.", 404);
-    return next(error);
-  }
-
-  res.json({
-    accounts: accounts.map((account) => account.toObject({ getters: true })),
-  });
-});
-
-/**
  *  @route  DELETE api/plaid/accounts/:id
  *  @desc   Delete target account linked with plaid for a specific user
  *  @access Private
@@ -164,55 +214,6 @@ router.delete("/accounts/:id", auth, async (req, res) => {
   }
 
   account.remove().then(() => res.json({ success: true }));
-});
-
-/**
- *  @todo   convert this to take in itemId and only pull data for that item
- *  @route  POST api/plaid/accounts/data
- *  @desc   Get balance and transaction data for accounts
- *  @access Private
- */
-router.post("/accounts/:id", auth, async (req, res, next) => {
-  /** Setup date ranges */
-  const now = moment();
-  const today = now.format("YYYY-MM-DD");
-  const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
-
-  /** Pull target accountId out of url parmas */
-  const accountId = req.params.id;
-
-  let accountData; 
-  try {
-    console.log('Attempting to fetch account data...')
-    accountData = await Account.findOne({ _id: accountId });
-  } catch (err) {
-    const error = new HttpError("Could not fetch account data.", 500);
-    return next(error);
-  }
-
-  if (!accountData.accessToken) {
-    const error = new HttpError("Invalid access token.", 401);
-    return next(error);
-  }
-
-  /** Fetch account data from plaid */
-  let balanceResponse, transactionResponse; 
-  try {
-    balanceResponse = await client.getBalance(
-      accountData.accessToken
-    );
-    transactionResponse = await client.getTransactions(
-      accountData.accessToken,
-      thirtyDaysAgo,
-      today,
-      { count: 10, offset: 0 }
-    );
-  } catch (err) {
-    const error = new HttpError("Could not fetch transactions.");
-    return next(error);
-  }
-
-  res.json({ balanceResponse, transactionResponse });
 });
 
 /**
