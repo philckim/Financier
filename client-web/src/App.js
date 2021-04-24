@@ -6,12 +6,12 @@ import {
   Switch,
 } from "react-router-dom";
 
-import Authenticate from "./components/pages/Authenticate";
-import Header from "./components/layout/Header";
-import Home from "./components/pages/Home";
-import { useAuth } from "./components/hooks/auth-hook";
+import AccountScreen from "./components/pages/AccountScreen";
 import { AuthContext } from "./components/functions/auth-context";
-
+import Header from "./components/layout/Header";
+import HomeScreen from "./components/pages/HomeScreen";
+import LoginScreen from "./components/pages/LoginScreen";
+import { useAuth } from "./components/hooks/auth-hook";
 import "./components/css/app.css";
 
 const App = () => {
@@ -43,7 +43,10 @@ const getRoutes = (isLoggedIn) => {
         <Header />
         <Switch>
           <Route path="/" exact>
-            <Home />
+            <HomeScreen />
+          </Route>
+          <Route path="/acc=:accountId">
+            <AccountScreen />
           </Route>
           <Redirect to="/" exact />
         </Switch>
@@ -53,7 +56,7 @@ const getRoutes = (isLoggedIn) => {
     return (
       <Switch>
         <Route path="/" exact>
-          <Authenticate />
+          <LoginScreen />
         </Route>
         <Redirect to="/" />
       </Switch>

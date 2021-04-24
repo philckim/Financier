@@ -1,0 +1,44 @@
+.accountslist-card {
+  display: flex;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  background: var(--bone);
+  justify-content: center;
+  align-items: center;
+  color: var(--slate);
+  height: 11rem;
+  margin: 0 auto;
+  margin-right: 1rem;
+  padding: 2rem;
+  width: 11rem;
+}
+
+.accountslist-card:hover,
+.accountslist-card:active {
+  color: var(--bone);
+  background: var(--slate);
+  border-color: var(--slate);
+}
+
+.accountslist-card--dark {
+  background: var(--slate);
+  color: var(--bone);
+}
+
+.accountslist-card--dark:hover,
+.accountslist-card--dark:active {
+  color: var(--bone);
+  background: var(--ocean);
+  border-color: var(--ocean);
+}
+
+.accountslist-holder {
+  margin-top: 1rem;
+  flex-direction: row;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.accountslist-holder > * {
+  margin: 1rem;
+}

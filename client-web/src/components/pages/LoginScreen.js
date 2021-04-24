@@ -16,7 +16,7 @@ import {
 
 import "../css/login.css";
 
-const Login = () => {
+const LoginScreen = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useAxiosClient();
@@ -152,7 +152,7 @@ const Login = () => {
                 {isLoginMode ? "LOGIN" : "SIGNUP"}
               </Button>
             </form>
-            <Button inverse onClick={switchModeHandler}>
+            <Button dark onClick={switchModeHandler}>
               SWITCH TO {isLoginMode ? "SIGNUP" : "LOGIN"}
             </Button>
           </Card>
@@ -162,4 +162,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginScreen;
