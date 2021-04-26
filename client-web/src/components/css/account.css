@@ -1,6 +1,5 @@
 .account-screen {
-  display: flex;
-  justify-content: space-around;
+  width: 85%;
 }
 
 .account-card-header {
@@ -14,10 +13,19 @@
 
 .account-card {
   padding: 0;
-  height: 50rem;
-  max-height: 80%;
-  max-width: 80%;
-  width: 90rem;
+  height: 40rem;
+  max-height: 85%;
+  width: 100%;
+}
+
+.account-card-container {
+  height: 100%;
+}
+
+.account-card-content {
+  height: 80%;
+  max-height: 85%;
+  overflow-y: scroll;
 }
 
 .account-button {
@@ -48,4 +56,31 @@
   color: var(--bone);
   background: var(--slate);
   border-color: var(--slate);
+}
+
+.account-navbuttons {
+  display: flex;
+  flex-direction: column;
+  width: 13rem;
+}
+
+.account-details-content {
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  flex-direction: column;
+  color: black;
+}
+
+.account-details-balance {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
+.account-details-balance-large {
+  color: green;
+  font-size: xx-large;
+  margin-right: 0.5rem;
 }

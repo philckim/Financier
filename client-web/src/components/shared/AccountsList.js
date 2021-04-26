@@ -1,8 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../css/accountslist.css";
 
 const AccountsList = (props) => {
+  const { accountId } = useParams();
   if (!props.accounts.length) {
     return <div>Error</div>;
   }
@@ -16,9 +17,19 @@ const AccountsList = (props) => {
               props.size || "default"
             } ${props.dark && "accountslist-card--dark"}`}
             key={account.id || account.account_id}
-            to={`/acc=${account.id || props.accountId}`}>
-            <div className="accountslist-card-title">
-              {account.institutionName || account.name}
+            to={
+              account.name
+                ? `/acc=${accountId}/sub=${account.account_id}`
+                : `/acc=${account.id}`
+            }>
+            <div className="accountslist-card-container">
+              <div className="accountslist-card-header" />
+              <div className="accountslist-card-title">
+                {account.institutionName || account.name}
+              </div>
+              <div className="accountslist-card-details">
+                {account.name && `(${account.subtype})`}
+              </div>
             </div>
           </Link>
         );

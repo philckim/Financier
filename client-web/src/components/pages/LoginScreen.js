@@ -148,7 +148,7 @@ const LoginScreen = () => {
                 errorText="Please enter a valid password, at least 5 characters."
                 onInput={inputHandler}
               />
-              <Button disabled={!formState.isValid} type="submit">
+              <Button dark disabled={!formState.isValid} type="submit">
                 {isLoginMode ? "LOGIN" : "SIGNUP"}
               </Button>
             </form>
