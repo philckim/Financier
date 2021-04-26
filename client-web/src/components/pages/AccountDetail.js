@@ -18,7 +18,7 @@ const AccountDetail = (props) => {
     const fetchAccountDetail = async () => {
       const responseData = await sendRequest(
         "GET",
-        `http://localhost:5000/api/plaid/accounts/${accountId}/subaccount/${subAccount}`,
+        `http://localhost:5000/api/plaid/accounts/${accountId}/${subAccount}`,
         {
           userId: auth.userId,
         },
