@@ -106,11 +106,11 @@ const HomeScreen = (props) => {
   }
 
   return (
-    <div className="home-screen">
+    <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       {content}
-    </div>
+    </React.Fragment>
   );
 };
 

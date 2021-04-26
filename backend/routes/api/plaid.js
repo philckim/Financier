@@ -166,7 +166,7 @@ router.get("/accounts/:accountId", auth, async (req, res, next) => {
   let accountData;
   try {
     accountData = await Account.findOne({ _id: accountId });
-    console.log('accountData = ', accountData)
+    console.log("accountData = ", accountData);
   } catch (err) {
     const error = new HttpError("Could not fetch account data.", 500);
     return next(error);
@@ -222,54 +222,58 @@ router.delete("/accounts/:accountId", auth, async (req, res) => {
  * @route GET apli/plaid/accounts/:accountId/:subaccountId
  * @access Private
  */
- router.get("/accounts/:accountId/:subAccountId", auth, async (req, res, next) => {
-  /** Setup date ranges */
-  const now = moment();
-  const today = now.format("YYYY-MM-DD");
-  const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
+router.get(
+  "/accounts/:accountId/:subAccountId",
+  auth,
+  async (req, res, next) => {
+    /** Setup date ranges */
+    const now = moment();
+    const today = now.format("YYYY-MM-DD");
+    const thirtyDaysAgo = now.subtract(30, "days").format("YYYY-MM-DD");
 
-  /** Pull target accountId out of url parmas */
-  const accountId = req.params.accountId;
-  const subAccountId = req.params.subAccountId;
+    /** Pull target accountId out of url parmas */
+    const accountId = req.params.accountId;
+    const subAccountId = req.params.subAccountId;
 
-  if (!accountId || !subAccountId) {
-    const error = new HttpError("Could not fetch account", 404);
-    return next(error);
+    if (!accountId || !subAccountId) {
+      const error = new HttpError("Could not fetch account", 404);
+      return next(error);
+    }
+
+    /** Account data for the specified account */
+    let accountData;
+    try {
+      accountData = await Account.findOne({ _id: accountId });
+    } catch (err) {
+      const error = new HttpError("Could not fetch account data.", 500);
+      return next(error);
+    }
+
+    if (!accountData.accessToken) {
+      const error = new HttpError("Invalid access token.", 401);
+      return next(error);
+    }
+
+    /** Fetch account data from plaid */
+    let balanceResponse, transactionResponse;
+    try {
+      balanceResponse = await client.getBalance(accountData.accessToken, {
+        account_ids: [subAccountId],
+      });
+      transactionResponse = await client.getTransactions(
+        accountData.accessToken,
+        thirtyDaysAgo,
+        today,
+        { account_ids: [subAccountId], count: 10, offset: 0 }
+      );
+    } catch (err) {
+      const error = new HttpError("Could not fetch transactions.");
+      return next(error);
+    }
+
+    res.json({ balanceResponse, transactionResponse });
   }
-
-  let accountData;
-  try {
-    accountData = await Account.findOne({ _id: accountId });
-  } catch (err) {
-    const error = new HttpError("Could not fetch account data.", 500);
-    return next(error);
-  }
-
-  if (!accountData.accessToken) {
-    const error = new HttpError("Invalid access token.", 401);
-    return next(error);
-  }
-
-  /** Fetch account data from plaid */
-  let balanceResponse, transactionResponse;
-  try {
-    balanceResponse = await client.getBalance(
-      accountData.accessToken,
-      { account_ids: [subAccountId]}
-    );
-    transactionResponse = await client.getTransactions(
-      accountData.accessToken,
-      thirtyDaysAgo,
-      today,
-      { account_ids: [subAccountId], count: 10, offset: 0 }
-    );
-  } catch (err) {
-    const error = new HttpError("Could not fetch transactions.");
-    return next(error);
-  }
-
-  res.json({ balanceResponse, transactionResponse });
-});
+);
 
 /**
  *  @todo   convert this to take in itemId and only pull data for that item

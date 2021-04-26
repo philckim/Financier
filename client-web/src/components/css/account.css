@@ -63,3 +63,24 @@
   flex-direction: column;
   width: 13rem;
 }
+
+.account-details-content {
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  flex-direction: column;
+  color: black;
+}
+
+.account-details-balance {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
+.account-details-balance-large {
+  color: green;
+  font-size: xx-large;
+  margin-right: 0.5rem;
+}
