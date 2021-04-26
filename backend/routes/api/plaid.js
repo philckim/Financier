@@ -199,10 +199,10 @@ router.get("/accounts/:accountId", auth, async (req, res, next) => {
  *  @desc   Delete target account linked with plaid for a specific user
  *  @access Private
  */
-router.delete("/accounts/:id", auth, async (req, res) => {
+router.delete("/accounts/:accountId", auth, async (req, res) => {
   let account;
   try {
-    account = Account.findById(req.params.id);
+    account = Account.findById(req.params.accountId);
   } catch (err) {
     const error = new HttpError("Error fetching account.", 500);
     return next(error);
@@ -215,6 +215,60 @@ router.delete("/accounts/:id", auth, async (req, res) => {
 
   account.remove().then(() => res.json({ success: true }));
 });
+
+/**
+ * Returns detail for individual accounts (ie chase checking, savings)
+ * @route GET apli/plaid/accounts/:accountId/subaccount/:subaccountId
+ * @access Private
+ */
+router.get("/accounts/:accountId/subaccount/:subAccountId"),
+  auth,
+  async (req, res) => {
+    /** The primary institution for the account */
+    let account;
+    try {
+      account = Account.findById(req.params.accountId);
+    } catch (err) {
+      const error = new HttpError("Error fetching account.", 500);
+      return next(error);
+    }
+
+    if (!account) {
+      const error = new HttpError("Account not found.", 404);
+      return next(error);
+    }
+
+    /** The sub account for that institution */
+    let subAccount;
+    try {
+      account = Account.findById(req.params.subAccountId);
+    } catch (err) {
+      const error = new HttpError("Error fetching detail.", 500);
+      return next(error);
+    }
+
+    if (!subAccount) {
+      const error = new HttpError("Account not found.", 404);
+      return next(error);
+    }
+
+    /** Fetch account data from plaid */
+    let balanceResponse, transactionResponse;
+    try {
+      balanceResponse = await client.getBalance(accountData.accessToken);
+      transactionResponse = await client.getTransactions(
+        accountData.accessToken,
+        thirtyDaysAgo,
+        today,
+        { count: 10, offset: 0 }
+      );
+    } catch (err) {
+      const error = new HttpError("Could not fetch transactions.");
+      return next(error);
+    }
+
+    res.json({ balanceResponse, transactionResponse });
+  };
 
 /**
  *  @todo   convert this to take in itemId and only pull data for that item

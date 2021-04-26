@@ -12,14 +12,14 @@ const Header = (props) => {
     auth.logout();
   };
   return (
-    <div className="header-container">
+    <React.Fragment>
       <div className="header-info">
         Welcome
         {auth.isLoggedIn &&
           ` ${auth.name.replace(/^\w/, (c) => c.toUpperCase())}`}
       </div>
       <Button onClick={logoutHandler}>LOGOUT</Button>
-    </div>
+    </React.Fragment>
   );
 };
 

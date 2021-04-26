@@ -6,6 +6,7 @@ import {
   Switch,
 } from "react-router-dom";
 
+import AccountDetail from "./components/pages/AccountDetail";
 import AccountScreen from "./components/pages/AccountScreen";
 import { AuthContext } from "./components/functions/auth-context";
 import Header from "./components/layout/Header";
@@ -40,16 +41,23 @@ const getRoutes = (isLoggedIn) => {
   if (isLoggedIn) {
     return (
       <React.Fragment>
-        <Header />
-        <Switch>
-          <Route path="/" exact>
-            <HomeScreen />
-          </Route>
-          <Route path="/acc=:accountId">
-            <AccountScreen />
-          </Route>
-          <Redirect to="/" exact />
-        </Switch>
+        <div className="header-container">
+          <Header />
+        </div>
+        <div className="viewport">
+          <Switch>
+            <Route path="/" exact>
+              <HomeScreen />
+            </Route>
+            <Route path="/acc=:accountId" exact>
+              <AccountScreen />
+            </Route>
+            <Route path="/acc=:accountId/sub=:subAccount" exact>
+              <AccountDetail />
+            </Route>
+            <Redirect to="/" exact />
+          </Switch>
+        </div>
       </React.Fragment>
     );
   } else {
