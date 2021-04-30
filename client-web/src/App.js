@@ -5,6 +5,8 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
 import AccountDetail from "./components/pages/AccountDetail";
 import AccountScreen from "./components/pages/AccountScreen";
@@ -14,6 +16,9 @@ import HomeScreen from "./components/pages/HomeScreen";
 import LoginScreen from "./components/pages/LoginScreen";
 import { useAuth } from "./components/hooks/auth-hook";
 import "./components/css/app.css";
+
+/** Icon Library */
+library.add(fas);
 
 const App = () => {
   const { token, login, logout } = useAuth();

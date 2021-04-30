@@ -166,7 +166,6 @@ router.get("/accounts/:accountId", auth, async (req, res, next) => {
   let accountData;
   try {
     accountData = await Account.findOne({ _id: accountId });
-    console.log("accountData = ", accountData);
   } catch (err) {
     const error = new HttpError("Could not fetch account data.", 500);
     return next(error);

@@ -5,15 +5,19 @@
 .account-card-header {
   background: var(--slate);
   color: white;
+  display: flex;
+  flex-direction: row;
+  font-size: x-large;
+  justify-content: space-between;
   margin-top: 0.3rem;
-  padding: 2rem 0.5rem;
-  font-size: large;
+  margin-bottom: 1rem;
+  padding: 2rem 2rem;
   width: 100%;
 }
 
 .account-card {
   padding: 0;
-  height: 40rem;
+  height: 55rem;
   max-height: 85%;
   width: 100%;
 }
@@ -23,7 +27,7 @@
 }
 
 .account-card-content {
-  height: 80%;
+  height: 50rem;
   max-height: 85%;
   overflow-y: scroll;
 }
@@ -83,4 +87,33 @@
   color: green;
   font-size: xx-large;
   margin-right: 0.5rem;
+}
+
+/** Transaction List */
+.transaction-list {
+  list-style: none;
+  margin: 1rem;
+}
+
+/** Transaction Items */
+.transaction-item {
+  margin: 1rem;
+}
+
+.transaction-item__content {
+  background-color: var(--slate);
+  padding: 0;
+}
+
+.transaction-item__info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.transaction-item__info h2,
+.transaction-item__info h3,
+.transaction-item__info p {
+  margin: 0 0 0.5rem 0;
 }

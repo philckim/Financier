@@ -27,7 +27,7 @@
 
 .accountslist-card--dark:hover,
 .accountslist-card--dark:active {
-  color: var(--bone);
+  color: white;
   background: var(--ocean);
   border-color: var(--ocean);
 }
@@ -35,11 +35,14 @@
 .accountslist-card-container {
   height: 100%;
   width: 100%;
+  justify-items: center;
 }
 
 .accountslist-card-details {
+  display: flex;
   margin-top: 1rem;
-  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .accountslist-card-header {
@@ -60,6 +63,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 .accountslist-holder > * {
   margin: 1rem;
+}
+
+.accountslist-icon {
+  margin-top: 1rem;
 }
