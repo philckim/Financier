@@ -1,5 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import "../css/accountslist.css";
 
 const AccountsList = (props) => {
@@ -28,7 +30,7 @@ const AccountsList = (props) => {
                 {account.institutionName || account.name}
               </div>
               <div className="accountslist-card-details">
-                {account.name && `(${account.subtype})`}
+                {account.name && <AccountIcon subtype={account.subtype} />}
               </div>
             </div>
           </Link>
@@ -39,3 +41,29 @@ const AccountsList = (props) => {
 };
 
 export default AccountsList;
+
+const AccountIcon = (props) => {
+  let icon;
+  switch (props.subtype) {
+    case "checking":
+      icon = "money-check-alt";
+      break;
+    case "credit card":
+      icon = "credit-card";
+      break;
+    case "mortgage":
+      icon = "home";
+      break;
+    case "savings":
+      icon = "piggy-bank";
+      break;
+    case "student":
+      icon = "user-graduate";
+      break;
+    default:
+      icon = "file-invoice-dollar";
+      break;
+  }
+
+  return <FontAwesomeIcon size="2x" icon={icon} />;
+};

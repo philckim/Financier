@@ -1,14 +1,12 @@
 .accountslist-card {
-  align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
   background: var(--bone);
-  display: flex;
   color: var(--slate);
+  display: flex;
   flex-direction: column;
   height: 11rem;
   justify-content: center;
-  margin: 0 auto;
   margin-right: 1rem;
   width: 11rem;
 }
@@ -27,7 +25,7 @@
 
 .accountslist-card--dark:hover,
 .accountslist-card--dark:active {
-  color: var(--bone);
+  color: white;
   background: var(--ocean);
   border-color: var(--ocean);
 }
@@ -35,11 +33,14 @@
 .accountslist-card-container {
   height: 100%;
   width: 100%;
+  justify-items: center;
 }
 
 .accountslist-card-details {
+  display: flex;
   margin-top: 1rem;
-  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .accountslist-card-header {
@@ -60,6 +61,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 .accountslist-holder > * {
   margin: 1rem;
+}
+
+.accountslist-icon {
+  margin-top: 1rem;
 }

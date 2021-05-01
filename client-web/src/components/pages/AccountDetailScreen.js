@@ -8,7 +8,7 @@ import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAxiosClient } from "../hooks/axios-hook";
 
-const AccountDetail = (props) => {
+const AccountDetailScreen = (props) => {
   const auth = useContext(AuthContext);
   const [accountDetail, setAccountDetail] = useState("LOADING");
   const { accountId, subAccount } = useParams();
@@ -16,17 +16,19 @@ const AccountDetail = (props) => {
 
   useEffect(() => {
     const fetchAccountDetail = async () => {
-      const responseData = await sendRequest(
-        "GET",
-        `http://localhost:5000/api/plaid/accounts/${accountId}/${subAccount}`,
-        {
-          userId: auth.userId,
-        },
-        {
-          "x-auth-token": auth.token,
-        }
-      );
-      setAccountDetail(responseData);
+      try {
+        const responseData = await sendRequest(
+          "GET",
+          `http://localhost:5000/api/plaid/accounts/${accountId}/${subAccount}`,
+          {
+            userId: auth.userId,
+          },
+          {
+            "x-auth-token": auth.token,
+          }
+        );
+        setAccountDetail(responseData);
+      } catch (err) {}
     };
     fetchAccountDetail();
   }, [accountId, auth.token, auth.userId, sendRequest, subAccount]);
@@ -56,7 +58,7 @@ const AccountDetail = (props) => {
   );
 };
 
-export default AccountDetail;
+export default AccountDetailScreen;
 
 const DetailList = (props) => {
   return (

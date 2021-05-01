@@ -1,36 +1,19 @@
-.home-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  align-content: center;
-  height: 7rem;
-}
-
 .home-accounts {
   display: flex;
-  margin-top: 5rem;
+  justify-content: space-around;
 }
 
-.home-card {
+.plaid-card {
   display: flex;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
-  background: var(--bone);
-  justify-content: center;
-  align-items: center;
-  color: var(--slate);
   height: 11rem;
   margin-left: 1rem;
-  margin-right: 1rem;
   margin-top: 2rem;
-  padding: 2rem;
+  padding: 0;
   width: 11rem;
 }
 
-.home-card:hover,
-.home-card:active {
-  color: var(--bone);
-  background: var(--slate);
-  border-color: var(--slate);
+.plaid-card-content {
+  width: 100%;
 }

@@ -5,15 +5,21 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
-import AccountDetail from "./components/pages/AccountDetail";
+import AccountDetailScreen from "./components/pages/AccountDetailScreen";
 import AccountScreen from "./components/pages/AccountScreen";
 import { AuthContext } from "./components/functions/auth-context";
 import Header from "./components/layout/Header";
 import HomeScreen from "./components/pages/HomeScreen";
+import IncomeScreen from "./components/pages/IncomeScreen";
 import LoginScreen from "./components/pages/LoginScreen";
 import { useAuth } from "./components/hooks/auth-hook";
 import "./components/css/app.css";
+
+/** Icon Library */
+library.add(fas);
 
 const App = () => {
   const { token, login, logout } = useAuth();
@@ -53,7 +59,10 @@ const getRoutes = (isLoggedIn) => {
               <AccountScreen />
             </Route>
             <Route path="/acc=:accountId/sub=:subAccount" exact>
-              <AccountDetail />
+              <AccountDetailScreen />
+            </Route>
+            <Route>
+              <IncomeScreen />
             </Route>
             <Redirect to="/" exact />
           </Switch>
