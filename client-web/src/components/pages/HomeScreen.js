@@ -3,9 +3,10 @@ import { PlaidLink } from "react-plaid-link";
 
 import AccountsList from "../shared/AccountsList";
 import { AuthContext } from "../functions/auth-context";
-import { useAxiosClient } from "../hooks/axios-hook";
+import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
+import { useAxiosClient } from "../hooks/axios-hook";
 import "../css/home.css";
 
 const HomeScreen = (props) => {
@@ -17,17 +18,19 @@ const HomeScreen = (props) => {
   useEffect(() => {
     if (!auth.token) return;
     const createLinkToken = async () => {
-      const responseData = await sendRequest(
-        "GET",
-        "http://localhost:5000/api/plaid/create-link-token",
-        {
-          userId: auth.userId,
-        },
-        {
-          "x-auth-token": auth.token,
-        }
-      );
-      setLinkToken(responseData);
+      try {
+        const responseData = await sendRequest(
+          "GET",
+          "http://localhost:5000/api/plaid/create-link-token",
+          {
+            userId: auth.userId,
+          },
+          {
+            "x-auth-token": auth.token,
+          }
+        );
+        setLinkToken(responseData);
+      } catch (err) {}
     };
 
     createLinkToken();
@@ -37,17 +40,19 @@ const HomeScreen = (props) => {
   useEffect(() => {
     if (!linkToken) return;
     const getAccounts = async () => {
-      const responseData = await sendRequest(
-        "GET",
-        "http://localhost:5000/api/plaid/accounts",
-        {
-          userId: auth.userId,
-        },
-        {
-          "x-auth-token": auth.token,
-        }
-      );
-      setAccounts(responseData.accounts);
+      try {
+        const responseData = await sendRequest(
+          "GET",
+          "http://localhost:5000/api/plaid/accounts",
+          {
+            userId: auth.userId,
+          },
+          {
+            "x-auth-token": auth.token,
+          }
+        );
+        setAccounts(responseData.accounts);
+      } catch (err) {}
     };
 
     getAccounts();
@@ -55,21 +60,21 @@ const HomeScreen = (props) => {
 
   const onSuccess = useCallback(
     async (publicToken, metadata) => {
-      const responseData = await sendRequest(
-        "POST",
-        "http://localhost:5000/api/plaid/token-exchange",
-        {
-          publicToken: publicToken,
-          metadata,
-          token: auth.token,
-        },
-        {
-          "x-auth-token": auth.token,
-        }
-      );
-      if (responseData.ok) {
-        console.log("Error");
-      }
+      try {
+        const responseData = await sendRequest(
+          "POST",
+          "http://localhost:5000/api/plaid/token-exchange",
+          {
+            publicToken: publicToken,
+            metadata,
+            token: auth.token,
+          },
+          {
+            "x-auth-token": auth.token,
+          }
+        );
+        console.log(responseData);
+      } catch (err) {}
     },
     [auth.token, sendRequest]
   );
@@ -95,12 +100,14 @@ const HomeScreen = (props) => {
     content = (
       <div className="home-accounts">
         <AccountsList accounts={accounts} userId={auth.userId} />
-        <PlaidLink
-          className="home-card"
-          token={linkToken}
-          onSuccess={onSuccess}>
-          Link via Plaid
-        </PlaidLink>
+        <Card className="plaid-card">
+          <PlaidLink
+            className="plaid-card-content"
+            token={linkToken}
+            onSuccess={onSuccess}>
+            Link via Plaid
+          </PlaidLink>
+        </Card>
       </div>
     );
   }

@@ -1,14 +1,12 @@
 .accountslist-card {
-  align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
   background: var(--bone);
-  display: flex;
   color: var(--slate);
+  display: flex;
   flex-direction: column;
   height: 11rem;
   justify-content: center;
-  margin: 0 auto;
   margin-right: 1rem;
   width: 11rem;
 }

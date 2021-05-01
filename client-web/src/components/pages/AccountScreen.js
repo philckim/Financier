@@ -26,18 +26,20 @@ const AccountScreen = (props) => {
   useEffect(() => {
     if (!accountId) return;
     const fetchAccount = async () => {
-      const responseData = await sendRequest(
-        "GET",
-        `http://localhost:5000/api/plaid/accounts/${accountId}`,
-        {
-          userId: auth.userId,
-        },
-        {
-          "x-auth-token": auth.token,
-        }
-      );
-      setAccounts(responseData.balanceResponse.accounts);
-      setTransactions(responseData.transactionResponse.transactions);
+      try {
+        const responseData = await sendRequest(
+          "GET",
+          `http://localhost:5000/api/plaid/accounts/${accountId}`,
+          {
+            userId: auth.userId,
+          },
+          {
+            "x-auth-token": auth.token,
+          }
+        );
+        setAccounts(responseData.balanceResponse.accounts);
+        setTransactions(responseData.transactionResponse.transactions);
+      } catch (err) {}
     };
     fetchAccount();
   }, [accountId, auth.token, auth.userId, sendRequest]);
