@@ -102,7 +102,7 @@ const HomeScreen = (props) => {
         <AccountsList accounts={accounts} userId={auth.userId} />
         <Card className="plaid-card">
           <PlaidLink
-            className="plaid-card-content"
+            className="plaid-card__content"
             token={linkToken}
             onSuccess={onSuccess}>
             Link via Plaid

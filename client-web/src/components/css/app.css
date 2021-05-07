@@ -44,16 +44,9 @@ img {
 /* Utilities */
 .viewport {
   display: flex;
-  height: 85%;
   justify-content: center;
   margin: 1rem;
-}
-
-.header-container {
-  display: flex;
-  height: 15%;
-  width: 100%;
-  margin-bottom: 1rem;
+  overflow: hidden;
 }
 
 .container {

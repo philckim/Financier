@@ -47,9 +47,7 @@ const getRoutes = (isLoggedIn) => {
   if (isLoggedIn) {
     return (
       <React.Fragment>
-        <div className="header-container">
-          <Header />
-        </div>
+        <Header />
         <div className="viewport">
           <Switch>
             <Route path="/" exact>

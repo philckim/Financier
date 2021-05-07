@@ -4,16 +4,14 @@
 }
 
 .plaid-card {
-  display: flex;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
+  display: flex;
   height: 11rem;
-  margin-left: 1rem;
-  margin-top: 2rem;
   padding: 0;
   width: 11rem;
 }
 
-.plaid-card-content {
+.plaid-card__content {
   width: 100%;
 }
