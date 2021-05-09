@@ -11,32 +11,28 @@ const AccountsList = (props) => {
   }
 
   return (
-    <div className="accountslist-holder">
+    <React.Fragment>
       {props.accounts.map((account) => {
         return (
           <Link
-            className={`accountslist-card accountslist-card--${
+            className={`accountslist-card accountslist-card__${
               props.size || "default"
-            } ${props.dark && "accountslist-card--dark"}`}
+            } ${props.dark && "accountslist-card__dark"}`}
             key={account.id || account.account_id}
             to={
               account.name
                 ? `/acc=${accountId}/sub=${account.account_id}`
                 : `/acc=${account.id}`
             }>
-            <div className="accountslist-card-container">
-              <div className="accountslist-card-header" />
-              <div className="accountslist-card-title">
-                {account.institutionName || account.name}
-              </div>
-              <div className="accountslist-card-details">
-                {account.name && <AccountIcon subtype={account.subtype} />}
-              </div>
+            <div className="accountslist-card__header" />
+            <div>{account.institutionName || account.name}</div>
+            <div className="accountslist-card__icon">
+              {account.name && <AccountIcon subtype={account.subtype} />}
             </div>
           </Link>
         );
       })}
-    </div>
+    </React.Fragment>
   );
 };
 

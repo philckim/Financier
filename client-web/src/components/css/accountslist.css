@@ -3,12 +3,12 @@
   border-radius: 6px;
   background: var(--bone);
   color: var(--slate);
-  display: flex;
   flex-direction: column;
   height: 11rem;
   justify-content: center;
   margin-right: 1rem;
   width: 11rem;
+  text-align: center;
 }
 
 .accountslist-card:hover,
@@ -18,54 +18,25 @@
   border-color: var(--slate);
 }
 
-.accountslist-card--dark {
+.accountslist-card__dark {
   background: var(--slate);
   color: var(--bone);
 }
 
-.accountslist-card--dark:hover,
-.accountslist-card--dark:active {
+.accountslist-card__dark:hover,
+.accountslist-card__dark:active {
   color: white;
   background: var(--ocean);
   border-color: var(--ocean);
 }
 
-.accountslist-card-container {
-  height: 100%;
-  width: 100%;
-  justify-items: center;
-}
-
-.accountslist-card-details {
-  display: flex;
-  margin-top: 1rem;
-  align-items: center;
-  justify-content: center;
-}
-
-.accountslist-card-header {
+.accountslist-card__header {
   height: 2px;
   margin-top: 1rem;
   margin-bottom: 2rem;
-  width: 100%;
   background: var(--bone);
 }
 
-.accountslist-card-title {
-  text-align: center;
-}
-
-.accountslist-holder {
-  margin-top: 1rem;
-  flex-direction: row;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.accountslist-holder > * {
-  margin: 1rem;
-}
-
-.accountslist-icon {
+.accountslist-card__icon {
   margin-top: 1rem;
 }

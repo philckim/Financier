@@ -48,27 +48,30 @@ const AccountScreen = (props) => {
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <div className="account-navbuttons">
-        <Button inverse className="account-button" to="/">
+      <div className="account-nav">
+        <Button inverse className="account-nav__button" to="/">
           RETURN
         </Button>
-        <Button inverse className="account-button" onClick={onClickHandler}>
+        <Button
+          inverse
+          className="account-nav__button"
+          onClick={onClickHandler}>
           {accountsMode ? "TRANSACTIONS" : "ACCOUNTS"}
         </Button>
       </div>
       <Card className="account-card">
-        <div className="account-card-container">
-          <div className="account-card-header">
-            {accountId}
-            <div>{accountsMode ? "ACCOUNTS" : "TRANSACTIONS"}</div>
-          </div>
-          <div className="account-card-content">
-            {accountsMode ? (
+        <div className="account-card__header">
+          {accountId}
+          <div>{accountsMode ? "ACCOUNTS" : "TRANSACTIONS"}</div>
+        </div>
+        <div className="account-card__content">
+          {accountsMode ? (
+            <div className="account-card__list">
               <AccountsList dark accounts={accounts} />
-            ) : (
-              <TransactionList transactions={transactions} />
-            )}
-          </div>
+            </div>
+          ) : (
+            <TransactionList transactions={transactions} />
+          )}
         </div>
       </Card>
     </React.Fragment>

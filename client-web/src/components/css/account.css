@@ -1,8 +1,16 @@
-.account-screen {
+.account-card {
+  display: flex;
+  flex-direction: column;
+  height: 55rem;
+  padding: 0;
   width: 85%;
 }
+.account-card__content {
+  height: 100%;
+  overflow-y: scroll;
+}
 
-.account-card-header {
+.account-card__header {
   background: var(--slate);
   color: white;
   display: flex;
@@ -12,27 +20,22 @@
   margin-top: 0.3rem;
   margin-bottom: 1rem;
   padding: 2rem 2rem;
-  width: 100%;
 }
 
-.account-card {
-  padding: 0;
-  height: 55rem;
-  max-height: 85%;
-  width: 100%;
+.account-card__list {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
 }
 
-.account-card-container {
-  height: 100%;
+/** Navigation buttons */
+.account-nav {
+  display: flex;
+  flex-direction: column;
+  width: 13rem;
 }
 
-.account-card-content {
-  height: 50rem;
-  max-height: 85%;
-  overflow-y: scroll;
-}
-
-.account-button {
+.account-nav__button {
   display: inline-block;
   font: inherit;
   padding: 0.5rem 1.5rem;
@@ -42,48 +45,39 @@
   color: var(--slate);
   cursor: pointer;
   height: 2.5rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
   max-height: 15%;
   max-width: 15%;
-  width: 7rem;
   text-align: center;
   text-decoration: none;
 }
 
-.account-button:focus {
+.account-nav__button:focus {
   outline: none;
 }
 
-.account-button:hover,
-.account-button:active {
+.account-nav__button:hover,
+.account-nav__button:active {
   color: var(--bone);
   background: var(--slate);
   border-color: var(--slate);
 }
 
-.account-navbuttons {
+/** Details */
+.account-details__content {
   display: flex;
-  flex-direction: column;
-  width: 13rem;
-}
-
-.account-details-content {
-  height: 100%;
-  width: 100%;
   padding: 1rem;
   flex-direction: column;
   color: black;
 }
 
-.account-details-balance {
+.account-details__balance {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   align-items: baseline;
 }
 
-.account-details-balance-large {
+.account-details__balance-large {
   color: green;
   font-size: xx-large;
   margin-right: 0.5rem;
@@ -106,7 +100,6 @@
 }
 
 .transaction-item__info {
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 1rem;

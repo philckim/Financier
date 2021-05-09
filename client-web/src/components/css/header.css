@@ -1,28 +1,13 @@
 .header-container {
-  display: flex;
   background: var(--slate);
-  padding: 6px 8px;
-
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 6px 8px;
 }
+
 .header-info {
   font-size: x-large;
   color: white;
-}
-.header-avatar {
-  display: block;
-  border-radius: 50%;
-  width: 15%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.header-name {
-  margin-left: 10px;
-  margin-top: 10px;
-}
-
-.header-company {
-  width: 85%;
 }
