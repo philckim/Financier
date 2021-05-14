@@ -2,30 +2,37 @@
   display: flex;
   flex-direction: column;
   height: 55rem;
-  padding: 0;
-  width: 85%;
-}
-.account-card__content {
-  height: 100%;
-  overflow-y: scroll;
+  padding: 1rem;
+  width: 100rem;
 }
 
 .account-card__header {
-  background: var(--slate);
+  background-color: var(--slate);
+  border: 2px solid var(--slate);
+  border-radius: 10px;
   color: white;
   display: flex;
   flex-direction: row;
-  font-size: x-large;
+  font-size: xx-large;
   justify-content: space-between;
-  margin-top: 0.3rem;
   margin-bottom: 1rem;
-  padding: 2rem 2rem;
+  padding: 1rem 1rem;
 }
 
 .account-card__list {
   display: flex;
   flex-direction: row;
-  margin: 1rem;
+  flex-wrap: wrap;
+  padding: 0 1rem 0 1rem;
+}
+
+.account-card__text {
+  background-color: var(--slate);
+  border: 2px solid var(--slate);
+  border-radius: 10px;
+  color: white;
+  font-size: x-large;
+  padding-left: 1rem;
 }
 
 /** Navigation buttons */
@@ -63,50 +70,21 @@
 }
 
 /** Details */
-.account-details__content {
-  display: flex;
-  padding: 1rem;
-  flex-direction: column;
-  color: black;
-}
-
 .account-details__balance {
+  align-items: baseline;
+  background-color: var(--bone);
+  border: 2px solid var(--bone);
+  border-radius: 10px;
+  color: var(--slate);
+  font-size: medium;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  align-items: baseline;
+  padding: 0 1rem 0 1rem;
 }
 
 .account-details__balance-large {
-  color: green;
+  color: var(--moss);
   font-size: xx-large;
-  margin-right: 0.5rem;
-}
-
-/** Transaction List */
-.transaction-list {
-  list-style: none;
-  margin: 1rem;
-}
-
-/** Transaction Items */
-.transaction-item {
-  margin: 1rem;
-}
-
-.transaction-item__content {
-  background-color: var(--slate);
-  padding: 0;
-}
-
-.transaction-item__info {
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.transaction-item__info h2,
-.transaction-item__info h3,
-.transaction-item__info p {
-  margin: 0 0 0.5rem 0;
+  margin-right: 0.7rem;
 }

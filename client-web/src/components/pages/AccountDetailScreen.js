@@ -6,6 +6,7 @@ import Button from "../shared/Button";
 import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
+import TransactionList from "../shared/TransactionList";
 import { useAxiosClient } from "../hooks/axios-hook";
 
 const AccountDetailScreen = (props) => {
@@ -19,7 +20,7 @@ const AccountDetailScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "GET",
-          `http://localhost:5000/api/plaid/accounts/${accountId}/${subAccount}`,
+          `http://localhost:5000/api/accounts/${accountId}/${subAccount}`,
           {
             userId: auth.userId,
           },
@@ -48,12 +49,13 @@ const AccountDetailScreen = (props) => {
       <Card className="account-card">
         <div className="account-card__header">
           {accountDetail.balanceResponse?.accounts[0].name || "LOADING"}
+          <BalanceDisplay balanceResponse={accountDetail.balanceResponse} />
         </div>
-        <div className="account-card__content">
-          {accountDetail.balanceResponse && (
-            <DetailList accountDetail={accountDetail} />
-          )}
-        </div>
+        {accountDetail.transactionResponse && (
+          <TransactionList
+            transactions={accountDetail.transactionResponse.transactions}
+          />
+        )}
       </Card>
     </React.Fragment>
   );
@@ -61,23 +63,16 @@ const AccountDetailScreen = (props) => {
 
 export default AccountDetailScreen;
 
-const DetailList = (props) => {
+const BalanceDisplay = (props) => {
   return (
-    <React.Fragment>
-      <div className="account-details__content">
-        <div className="account-details__balance">
-          $
-          <div className="account-details__balance-large">
-            {props.accountDetail.balanceResponse.accounts[0].balances.current ||
-              0}
-          </div>
-          (of{"  "}
-          {props.accountDetail.balanceResponse.accounts[0].balances.available +
-            props.accountDetail.balanceResponse.accounts[0].balances.current ||
-            0}
-          )
-        </div>
+    <div className="account-details__balance">
+      <div className="account-details__balance-large">
+        ${props.balanceResponse?.accounts[0].balances.current || 0}
       </div>
-    </React.Fragment>
+      (of{"  "}
+      {props.balanceResponse?.accounts[0].balances.available +
+        props.balanceResponse?.accounts[0].balances.current || 0}
+      )
+    </div>
   );
 };

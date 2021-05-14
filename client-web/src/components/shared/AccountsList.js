@@ -25,9 +25,13 @@ const AccountsList = (props) => {
                 : `/acc=${account.id}`
             }>
             <div className="accountslist-card__header" />
-            <div>{account.institutionName || account.name}</div>
-            <div className="accountslist-card__icon">
-              {account.name && <AccountIcon subtype={account.subtype} />}
+            <div className="accountslist-card__info">
+              {account.institutionName || account.name}
+              {account.name && (
+                <div className="accountslist-card__icon">
+                  <AccountIcon subtype={account.subtype} />
+                </div>
+              )}
             </div>
           </Link>
         );

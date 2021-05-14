@@ -15,9 +15,10 @@ app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
 
 /** Define routes */
-app.use("/api/users", require("./routes/api/users"));
-app.use("/api/auth", require("./routes/api/auth"));
-app.use("/api/plaid", require("./routes/api/plaid"));
+app.use("/api/accounts", require("./routes/accounts"));
+app.use("/api/income", require("./routes/income"));
+app.use("/api/token", require("./routes/token"));
+app.use("/api/users", require("./routes/users"));
 
 /** Error Handling */
 app.use((req, res, next) => {

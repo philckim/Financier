@@ -1,0 +1,24 @@
+/** Transaction List */
+.transaction-list {
+  list-style: none;
+  height: 100%;
+  margin: 1rem;
+  overflow-y: scroll;
+}
+
+/** Transaction Items */
+.transaction-item {
+  display: flex;
+  background-color: var(--slate);
+  color: var(--bone);
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.transaction-item__info h2,
+.transaction-item__info h3,
+.transaction-item__info p {
+  margin: 0 0 0.5rem 0;
+}

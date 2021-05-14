@@ -4,11 +4,10 @@
   background: var(--bone);
   color: var(--slate);
   flex-direction: column;
-  height: 11rem;
-  justify-content: center;
-  margin-right: 1rem;
-  width: 11rem;
+  height: 9rem;
+  margin: 0 1rem 1rem 0;
   text-align: center;
+  width: 9rem;
 }
 
 .accountslist-card:hover,
@@ -32,11 +31,20 @@
 
 .accountslist-card__header {
   height: 2px;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin: 1rem 0 1rem 0;
   background: var(--bone);
 }
 
 .accountslist-card__icon {
-  margin-top: 1rem;
+  align-self: flex-end;
+  justify-self: flex-end;
+}
+
+.accountslist-card__info {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 73%;
+  justify-content: space-between;
+  padding: 0 0.5rem 0 0.5rem;
 }
