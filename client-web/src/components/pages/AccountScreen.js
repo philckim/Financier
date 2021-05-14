@@ -7,6 +7,7 @@ import Button from "../shared/Button";
 import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
+import TransactionList from "../shared/TransactionList";
 import { useAxiosClient } from "../hooks/axios-hook";
 
 import "../css/account.css";
@@ -14,14 +15,10 @@ import "../css/account.css";
 const AccountScreen = (props) => {
   const [accounts, setAccounts] = useState([]);
   const { accountId } = useParams();
-  const [accountsMode, setAccountsMode] = useState(true);
   const auth = useContext(AuthContext);
+  const [header, setHeader] = useState("LOADING");
   const [transactions, setTransactions] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useAxiosClient();
-
-  const onClickHandler = () => {
-    setAccountsMode((state) => !state);
-  };
 
   useEffect(() => {
     if (!accountId) return;
@@ -29,7 +26,7 @@ const AccountScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "GET",
-          `http://localhost:5000/api/plaid/accounts/${accountId}`,
+          `http://localhost:5000/api/accounts/${accountId}`,
           {
             userId: auth.userId,
           },
@@ -37,6 +34,7 @@ const AccountScreen = (props) => {
             "x-auth-token": auth.token,
           }
         );
+        setHeader(responseData.institutionResponse.institution.name);
         setAccounts(responseData.balanceResponse.accounts);
         setTransactions(responseData.transactionResponse.transactions);
       } catch (err) {}
@@ -52,69 +50,23 @@ const AccountScreen = (props) => {
         <Button inverse className="account-nav__button" to="/">
           RETURN
         </Button>
-        <Button
-          inverse
-          className="account-nav__button"
-          onClick={onClickHandler}>
-          {accountsMode ? "TRANSACTIONS" : "ACCOUNTS"}
-        </Button>
       </div>
       <Card className="account-card">
-        <div className="account-card__header">
-          {accountId}
-          <div>{accountsMode ? "ACCOUNTS" : "TRANSACTIONS"}</div>
-        </div>
-        <div className="account-card__content">
-          {accountsMode ? (
-            <div className="account-card__list">
-              <AccountsList dark accounts={accounts} />
-            </div>
-          ) : (
+        <div className="account-card__header">{header}</div>
+        {accounts.length && (
+          <div className="account-card__list">
+            <AccountsList dark accounts={accounts} />
+          </div>
+        )}
+        {transactions.length && (
+          <React.Fragment>
+            <div className="account-card__text">Transaction Overview</div>
             <TransactionList transactions={transactions} />
-          )}
-        </div>
+          </React.Fragment>
+        )}
       </Card>
     </React.Fragment>
   );
 };
 
 export default AccountScreen;
-
-const TransactionList = (props) => {
-  if (!props.transactions.length) {
-    return (
-      <div className="transaction-list center">
-        <Card className="transaction-item__content">
-          <div className="transaction-item__info">
-            <h2>No transactions found.</h2>
-          </div>
-        </Card>
-      </div>
-    );
-  }
-
-  return (
-    <ul className="transaction-list">
-      {props.transactions.map((transaction) => (
-        <TransactionItem
-          key={transaction.transaction_id}
-          name={transaction.name}
-          amount={transaction.amount}
-        />
-      ))}
-    </ul>
-  );
-};
-
-const TransactionItem = (props) => {
-  return (
-    <li className="transaction-item">
-      <Card className="transaction-item__content">
-        <div className="transaction-item__info">
-          <h2>{props.name}</h2>
-          <h3>${props.amount}</h3>
-        </div>
-      </Card>
-    </li>
-  );
-};

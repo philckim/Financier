@@ -3,13 +3,21 @@
   justify-content: space-around;
 }
 
+.home-empty {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  height: 20rem;
+  justify-content: space-around;
+}
+
 .plaid-card {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
   display: flex;
-  height: 11rem;
+  height: 9rem;
   padding: 0;
-  width: 11rem;
+  width: 9rem;
 }
 
 .plaid-card__content {

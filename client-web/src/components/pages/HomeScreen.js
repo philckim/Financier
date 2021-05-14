@@ -21,7 +21,7 @@ const HomeScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "GET",
-          "http://localhost:5000/api/plaid/create-link-token",
+          "http://localhost:5000/api/token/create-link-token",
           {
             userId: auth.userId,
           },
@@ -43,7 +43,7 @@ const HomeScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "GET",
-          "http://localhost:5000/api/plaid/accounts",
+          "http://localhost:5000/api/accounts",
           {
             userId: auth.userId,
           },
@@ -83,18 +83,25 @@ const HomeScreen = (props) => {
   let content;
   if (!accounts.length) {
     content = (
-      <React.Fragment>
-        <h3>No Accounts found!</h3>
-        <h4>
-          Link your account now with plaid, Click the 'Link via Plaid' button to
-          get started.
-        </h4>
+      <div className="home-empty">
+        <div>
+          <h3>No Accounts found!</h3>
+          <h4>
+            Link your account now with plaid, Click the 'Link via Plaid' button
+            to get started.
+          </h4>
+        </div>
         {linkToken && (
-          <PlaidLink token={linkToken} onSuccess={onSuccess}>
-            Link via Plaid
-          </PlaidLink>
+          <Card className="plaid-card">
+            <PlaidLink
+              className="plaid-card__content"
+              token={linkToken}
+              onSuccess={onSuccess}>
+              Link via Plaid
+            </PlaidLink>
+          </Card>
         )}
-      </React.Fragment>
+      </div>
     );
   } else {
     content = (

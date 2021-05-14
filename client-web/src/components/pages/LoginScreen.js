@@ -80,7 +80,7 @@ const LoginScreen = () => {
       try {
         const responseData = await sendRequest(
           "POST",
-          "http://localhost:5000/api/auth",
+          "http://localhost:5000/api/users",
           {
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
@@ -96,7 +96,7 @@ const LoginScreen = () => {
         formData.append("password", formState.inputs.password.value);
         const responseData = await sendRequest(
           "POST",
-          "http://localhost:5000/api/users",
+          "http://localhost:5000/api/users/create",
           {
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
