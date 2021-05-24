@@ -63,7 +63,7 @@ const HomeScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "POST",
-          "http://localhost:5000/api/plaid/token-exchange",
+          "http://localhost:5000/api/token/token-exchange",
           {
             publicToken: publicToken,
             metadata,
