@@ -59,7 +59,7 @@ const getRoutes = (isLoggedIn) => {
             <Route path="/acc=:accountId/sub=:subAccount" exact>
               <AccountDetailScreen />
             </Route>
-            <Route>
+            <Route path="/income" exact>
               <IncomeScreen />
             </Route>
             <Redirect to="/" exact />
