@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const auth = require("../middleware/auth");
 const config = require("config");
@@ -173,15 +174,18 @@ router.post(
       },
     };
 
-    /** Signed user token */
+    /** Generated user token */
     let token;
     try {
-      token = jwt.sign(payload, config.get("jwtSecret"), { expiresIn: 3600 });
+      token = jwt.sign(payload, config.get("jwtSecret"), {
+        expiresIn: "1h",
+      });
     } catch (err) {
       const error = new HttpError("Login Failed.", 500);
       return next(error);
     }
-    res.json(token);
+
+    res.json({ token });
   }
 );
 

@@ -28,7 +28,7 @@ const IncomeScreen = (props) => {
         setIncome(responseData);
       } catch (err) {}
     };
-    getIncome();
+    //getIncome();
   }, [auth.token, auth.userId, sendRequest]);
 
   let content;
