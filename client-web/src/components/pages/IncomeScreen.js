@@ -5,19 +5,23 @@ import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAxiosClient } from "../hooks/axios-hook";
+import {
+  getTransactionsByType,
+  getTotalAmount,
+} from "../functions/transactions";
 
 const IncomeScreen = (props) => {
   const auth = useContext(AuthContext);
-  const [income, setIncome] = useState();
+  const [transactions, setTransactions] = useState();
   const { isLoading, error, sendRequest, clearError } = useAxiosClient();
 
   useEffect(() => {
     if (!auth.token) return;
-    const getIncome = async () => {
+    const getTransactions = async () => {
       try {
         const responseData = await sendRequest(
           "GET",
-          "http://localhost:5000/api/income",
+          `http://localhost:5000/api/income/12`,
           {
             userId: auth.userId,
           },
@@ -25,21 +29,33 @@ const IncomeScreen = (props) => {
             "x-auth-token": auth.token,
           }
         );
-        setIncome(responseData);
+        setTransactions(responseData.transactionResponse.transactions);
       } catch (err) {}
     };
-    //getIncome();
+    getTransactions();
   }, [auth.token, auth.userId, sendRequest]);
 
   let content;
-  if (!income) {
+  if (!transactions) {
     content = <h2>LOADING</h2>;
   } else {
     content = (
       <Card className="account-card">
-        <div className="account-card-container">
-          <div className="account-card-header"></div>
-        </div>
+        <div className="account-card__header">INCOME</div>
+        {console.log(transactions)}
+        TRANSACTIONS: {transactions?.length || 0}
+        <br />
+        INCOME:{" "}
+        {getTotalAmount(getTransactionsByType(transactions, "income")).toFixed(
+          2
+        )}
+        <br />
+        SPENDING:{" "}
+        {getTotalAmount(
+          getTransactionsByType(transactions, "expenditure")
+        ).toFixed(2)}
+        <br />
+        TOTALS: {getTotalAmount(transactions).toFixed(2)}
       </Card>
     );
   }
