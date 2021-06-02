@@ -10,6 +10,8 @@ import {
   getTotalAmount,
 } from "../functions/transactions";
 
+import "../css/income.css";
+
 const IncomeScreen = (props) => {
   const auth = useContext(AuthContext);
   const [transactions, setTransactions] = useState();
@@ -42,20 +44,10 @@ const IncomeScreen = (props) => {
     content = (
       <Card className="account-card">
         <div className="account-card__header">INCOME</div>
-        {console.log(transactions)}
-        TRANSACTIONS: {transactions?.length || 0}
-        <br />
-        INCOME:{" "}
-        {getTotalAmount(getTransactionsByType(transactions, "income")).toFixed(
-          2
-        )}
-        <br />
-        SPENDING:{" "}
-        {getTotalAmount(
-          getTransactionsByType(transactions, "expenditure")
-        ).toFixed(2)}
-        <br />
-        TOTALS: {getTotalAmount(transactions).toFixed(2)}
+        <div className="income-details">
+          <IncomeCards transactions={transactions} />
+          <RiskAssessment />
+        </div>
       </Card>
     );
   }
@@ -70,3 +62,40 @@ const IncomeScreen = (props) => {
 };
 
 export default IncomeScreen;
+
+/** A container that holds various stats about transactions */
+const IncomeCards = (props) => {
+  return (
+    <div className="income-cards__container">
+      <div className="income-card">
+        <div className="income-card__header">Transactions</div>
+        {props.transactions?.length || 0}
+      </div>
+      <div className="income-card">
+        <div className="income-card__header">Income</div>
+        {getTotalAmount(
+          getTransactionsByType(props.transactions, "income")
+        ).toFixed(2)}
+      </div>
+      <div className="income-card">
+        <div className="income-card__header">Spending</div>
+        {getTotalAmount(
+          getTransactionsByType(props.transactions, "expenditure")
+        ).toFixed(2)}
+      </div>
+      <div className="income-card">
+        <div className="income-card__header">Totals</div>
+        {getTotalAmount(props.transactions).toFixed(2)}
+      </div>
+    </div>
+  );
+};
+
+/** Displays user risk assessment based on the algo */
+const RiskAssessment = (props) => {
+  return (
+    <div className="income-risk">
+      <div className="income-risk__header">RISK ANALYSIS</div>
+    </div>
+  );
+};
