@@ -3,6 +3,7 @@
   border-radius: 6px;
   background: var(--bone);
   color: var(--slate);
+  display: flex;
   flex-direction: column;
   height: 9rem;
   margin: 0 1rem 1rem 0;

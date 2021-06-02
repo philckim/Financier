@@ -1,0 +1,55 @@
+.income-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  background: var(--slate);
+  color: var(--bone);
+  flex-direction: column;
+  height: 9rem;
+  margin: 0 1rem 1rem 0;
+  text-align: center;
+  width: 9rem;
+}
+
+.income-card:hover,
+.income-card:active {
+  color: white;
+  background: var(--ocean);
+  border-color: var(--ocean);
+}
+
+.income-cards__container {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+}
+
+.income-card__header {
+  align-self: center;
+  background: var(--bone);
+  color: var(--slate);
+  font-weight: bold;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.income-details {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.income-risk {
+  align-content: center;
+  display: flex;
+  justify-content: center;
+  width: 60%;
+}
+
+.income-risk__header {
+  background: var(--slate);
+  border-radius: 10px;
+  font-size: xx-large;
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
