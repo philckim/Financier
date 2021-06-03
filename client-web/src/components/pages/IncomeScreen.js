@@ -6,8 +6,12 @@ import ErrorModal from "../layout/ErrorModal";
 import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAxiosClient } from "../hooks/axios-hook";
 import {
+  getPositiveMonths,
   getTransactionsByType,
   getTotalAmount,
+  sortTransactions,
+  getRiskCategory,
+  getRiskTotal,
 } from "../functions/transactions";
 
 import "../css/income.css";
@@ -23,7 +27,7 @@ const IncomeScreen = (props) => {
       try {
         const responseData = await sendRequest(
           "GET",
-          `http://localhost:5000/api/income/12`,
+          "http://localhost:5000/api/income/12",
           {
             userId: auth.userId,
           },
@@ -46,7 +50,7 @@ const IncomeScreen = (props) => {
         <div className="account-card__header">INCOME</div>
         <div className="income-details">
           <IncomeCards transactions={transactions} />
-          <RiskAssessment />
+          <RiskAssessment transactions={transactions} />
         </div>
       </Card>
     );
@@ -93,9 +97,37 @@ const IncomeCards = (props) => {
 
 /** Displays user risk assessment based on the algo */
 const RiskAssessment = (props) => {
+  /** Total Inbound */
+  let annualIncome = getTotalAmount(
+    getTransactionsByType(props.transactions, "income")
+  ).toFixed(2);
+
+  /** Total Outbound */
+  let annualSpend = getTotalAmount(
+    getTransactionsByType(props.transactions, "expenditure")
+  ).toFixed(2);
+
+  /** Total positive months */
+  let positiveMonths = getPositiveMonths(sortTransactions(props.transactions));
+
+  /** Risk category based on annual info */
+  let riskCategory = getRiskCategory(annualIncome, annualSpend);
+
+  /** Risk score from category, monthly */
+  let riskScore = getRiskTotal(riskCategory, positiveMonths);
+
   return (
     <div className="income-risk">
       <div className="income-risk__header">RISK ANALYSIS</div>
+      <div className="income-risk__details">
+        ANNUAL NET: {annualIncome}
+        <br />
+        POSITIVES MONTHS: {positiveMonths}
+        <br />
+        RISK CATEGORY: {riskCategory}
+        <br />
+        CALCULATED SCORE: {riskScore}
+      </div>
     </div>
   );
 };
