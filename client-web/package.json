@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "install": "^0.13.0",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "npm": "^7.9.0",
     "plaid-threads": "^11.2.3",
     "react": "^17.0.2",

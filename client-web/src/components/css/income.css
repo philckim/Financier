@@ -40,16 +40,25 @@
 
 .income-risk {
   align-content: center;
+  background: var(--slate);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  height: 100%;
   width: 60%;
 }
 
+.income-risk__details {
+  margin: 0 1rem 0 1rem;
+}
+
 .income-risk__header {
-  background: var(--slate);
-  border-radius: 10px;
+  background: var(--bone);
+  color: var(--slate);
   font-size: xx-large;
-  height: 100%;
+  font-weight: bold;
+  margin: 0.5rem 0 0.5rem 0;
   text-align: center;
   width: 100%;
 }
