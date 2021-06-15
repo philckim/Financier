@@ -1,0 +1,6 @@
+{
+    "mongoURI": "mongodb+srv://user:LCa1lbb8Ej5TbUnM@ratemylandlord.6apnb.mongodb.net/rateMyLandlord?retryWrites=true&w=majority",
+    "jwtSecret": "secret",
+    "PLAID_CLIENT_ID": "603956fb02cf49000f1622bf",
+    "PLAID_SECRET": "c311d1b585f18836e80d7710365f63"
+}
