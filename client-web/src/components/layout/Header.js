@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { AuthContext } from "../functions/auth-context";
 import Button from "../shared/Button";
@@ -18,17 +19,14 @@ const Header = (props) => {
         {auth.isLoggedIn &&
           ` ${auth.name.replace(/^\w/, (c) => c.toUpperCase())}`}
       </div>
-      <div>
+      <div className="header-buttons">
         <Button to="/">ACCOUNTS</Button>
         <Button to="/income">INCOME</Button>
         <Button onClick={logoutHandler}>LOGOUT</Button>
+        <Link to="/user">
+          <img className="header-avatar" src={`${auth.image}`} alt="Profile" />
+        </Link>
       </div>
-      <Button
-        className="header-avatar"
-        src={auth.image}
-        to="/user"
-        alt="Profile"
-      />
     </div>
   );
 };

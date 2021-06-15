@@ -16,6 +16,7 @@ import HomeScreen from "./components/pages/HomeScreen";
 import IncomeScreen from "./components/pages/IncomeScreen";
 import LoginScreen from "./components/pages/LoginScreen";
 import { useAuth } from "./components/hooks/auth-hook";
+import UserScreen from "./components/pages/UserScreen";
 import "./components/css/app.css";
 
 /** Icon Library */
@@ -62,6 +63,9 @@ const getRoutes = (isLoggedIn) => {
             </Route>
             <Route path="/income" exact>
               <IncomeScreen />
+            </Route>
+            <Route path="/user" exact>
+              <UserScreen />
             </Route>
             <Redirect to="/" exact />
           </Switch>

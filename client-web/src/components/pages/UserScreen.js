@@ -10,7 +10,7 @@ const UserScreen = (props) => {
   return (
     <div>
       Hello {auth.name}
-      <img src={`http://localhost/uploads/images/${auth.image}`} alt="Avatar" />
+      <img src={auth.image} alt="Avatar" />
     </div>
   );
 };

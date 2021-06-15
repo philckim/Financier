@@ -152,7 +152,7 @@ router.post(
     try {
       const salt = await bcrypt.genSalt(10);
       newUser.password = await bcrypt.hash(password, salt);
-      await user.save();
+      await newUser.save();
     } catch (err) {
       const error = new HttpError("Sign Up Failed.", 500);
       return next(error);
