@@ -3,12 +3,12 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const gravatar = require("gravatar");
 
 const auth = require("../middleware/auth");
 const config = require("config");
-const User = require("../models/User");
+const fileUpload = require("../middleware/file-upload");
 const HttpError = require("../models/Http-Error");
+const User = require("../models/User");
 
 /**
  * @route   GET api/auth
@@ -111,6 +111,7 @@ router.post(
  */
 router.post(
   "/create",
+  fileUpload.single("image"),
   [
     check("name", "Name is required").not().isEmpty(),
     check("email", "Valid email is required").isEmail(),
@@ -121,44 +122,36 @@ router.post(
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log("errors found", errors);
-      return res.status(400).json({ errors: errors.array() });
+      return next(new HttpError("Invalid inputs.", 422));
     }
 
     const { name, email, password } = req.body;
 
     /** Check if user exists */
-    let user;
+    let existingUser;
     try {
-      user = await User.findOne({ email });
+      existingUser = await User.findOne({ email });
     } catch (err) {
       const error = new HttpError("Error fetching user.", 500);
       return next(error);
     }
 
-    if (user) {
+    if (existingUser) {
       const error = new HttpError("User already exists.", 422);
       return next(error);
     }
 
-    /**  User gravatar */
-    const avatar = gravatar.url(email, {
-      s: "200",
-      r: "pg",
-      d: "mm",
-    });
-
-    user = new User({
+    const newUser = new User({
       name,
       email,
-      avatar,
+      image: req.file.path,
       password,
     });
 
     /** Encrypted password */
     try {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
+      newUser.password = await bcrypt.hash(password, salt);
       await user.save();
     } catch (err) {
       const error = new HttpError("Sign Up Failed.", 500);
@@ -168,9 +161,10 @@ router.post(
     /** JSON user object */
     const payload = {
       user: {
-        userId: user.id,
-        email: user.email,
-        name: user.name,
+        userId: newUser.id,
+        email: newUser.email,
+        image: newUser.image,
+        name: newUser.name,
       },
     };
 

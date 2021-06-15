@@ -32,6 +32,7 @@ const App = () => {
         login: login,
         logout: logout,
         email: token.email,
+        image: token.image,
         name: token.name,
         userId: token.userId,
         token: token.token,

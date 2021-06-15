@@ -1,6 +1,8 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const HttpError = require("./models/Http-Error");
 
@@ -13,6 +15,7 @@ connectDB();
 app.use(cors());
 app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 /** Define routes */
 app.use("/api/accounts", require("./routes/accounts"));
@@ -28,6 +31,20 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (res._headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occured." });
+});
+
+/** File error handling - deletes the file on error */
+app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
+  if (res.headerSent) {
     return next(error);
   }
   res.status(error.code || 500);

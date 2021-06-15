@@ -23,6 +23,12 @@ const Header = (props) => {
         <Button to="/income">INCOME</Button>
         <Button onClick={logoutHandler}>LOGOUT</Button>
       </div>
+      <Button
+        className="header-avatar"
+        src={auth.image}
+        to="/user"
+        alt="Profile"
+      />
     </div>
   );
 };
