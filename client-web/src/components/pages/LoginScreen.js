@@ -6,8 +6,10 @@ import Button from "../shared/Button";
 import Card from "../shared/Card";
 import ErrorModal from "../layout/ErrorModal";
 import { useForm } from "../hooks/form-hook";
+import ImageUpload from "../layout/ImageUpload";
 import Input from "../shared/Input";
 import LoadingSpinner from "../layout/LoadingSpinner";
+
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -45,6 +47,8 @@ const LoginScreen = () => {
         {
           ...formState.inputs,
           email: undefined,
+          image: undefined,
+          name: undefined,
           password: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
@@ -92,16 +96,14 @@ const LoginScreen = () => {
       try {
         const formData = new FormData();
         formData.append("email", formState.inputs.email.value);
+        formData.append("image", formState.inputs.image.value);
         formData.append("name", formState.inputs.name.value);
         formData.append("password", formState.inputs.password.value);
         const responseData = await sendRequest(
           "POST",
           "http://localhost:5000/api/users/create",
-          {
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }
+
+          formData
         );
         auth.login(responseData.token);
       } catch (err) {}
@@ -119,17 +121,6 @@ const LoginScreen = () => {
             <h2 style={{ color: "black" }}>Login Required</h2>
             <hr />
             <form onSubmit={authSubmitHandler}>
-              {!isLoginMode && (
-                <Input
-                  element="input"
-                  id="name"
-                  type="text"
-                  label="Your Name"
-                  validators={[VALIDATOR_REQUIRE()]}
-                  errorText="Please enter a name."
-                  onInput={inputHandler}
-                />
-              )}
               <Input
                 element="input"
                 id="email"
@@ -139,6 +130,26 @@ const LoginScreen = () => {
                 errorText="Please enter a valid email address."
                 onInput={inputHandler}
               />
+              {!isLoginMode && (
+                <>
+                  <ImageUpload
+                    center
+                    id="image"
+                    onInput={inputHandler}
+                    errorText="Please provide an image."
+                  />
+
+                  <Input
+                    element="input"
+                    id="name"
+                    type="text"
+                    label="Your Name"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    errorText="Please enter a name."
+                    onInput={inputHandler}
+                  />
+                </>
+              )}
               <Input
                 element="input"
                 id="password"

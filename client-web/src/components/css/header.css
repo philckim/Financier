@@ -11,3 +11,15 @@
   font-size: x-large;
   color: white;
 }
+
+.header-avatar {
+  display: block;
+  border-radius: 50%;
+  width: 2.7rem;
+  height: 2.7rem;
+  object-fit: cover;
+}
+
+.header-buttons {
+  display: flex;
+}
