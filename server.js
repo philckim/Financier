@@ -53,7 +53,7 @@ app.use((error, req, res, next) => {
 
 // Serve static assets in production
 if(process.env.NODE_ENV === 'production') {
-  // Set static folder
+  /** Set static folder */
   app.use(express.static('client-web/build'));
 
   app.get('*', (req, res) => {
