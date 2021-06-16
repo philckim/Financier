@@ -5,7 +5,7 @@ const router = express.Router();
 const Account = require("../models/Account");
 const auth = require("../middleware/auth");
 const HttpError = require("../models/Http-Error");
-const keys = require("../config/default.json");
+const keys = require("../config/production.json");
 const User = require("../models/User");
 
 /** Plaid api w/ api keys */
