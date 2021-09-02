@@ -1,4 +1,4 @@
-# cuddly-octo-doodle
+# Financier
 
 **nsc ad program capstone project.**
 
