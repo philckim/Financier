@@ -1,8 +1,7 @@
 # Financier
 
-**nsc ad program capstone project.**
-
-An all-in-one app for managing your finances. Link several accounts, get easy-to-read visualization to help make informed choices.
+Algorithmic financial risk calculation. A robust credit score alternative.
+Link your accounts, get easy-to-read visualization to help make informed decisions.
 
 ## CONTRIBUTING
 
